@@ -3,171 +3,234 @@ jmp 0x0000:start
 
 data:
 
-img db 7, 7, 7, 7, 7, 7, 7, 7, 8, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 8, 8, 8, 8, 8, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 8, 4, 4, 4, 4, 4, 4, 8, 8, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 8, 4, 4, 4, 4, 4, 4, 4, 0, 8, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 8, 4, 4, 4, 4, 4, 4, 4, 4, 4, 8, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 8, 4, 4, 4, 4, 4, 4, 6, 8, 8, 8, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 6, 4, 4, 4, 4, 6, 6, 8, 8, 8, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 6, 4, 4, 4, 4, 4, 6, 8, 8, 8, 7, 8, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 6, 4, 4, 4, 4, 4, 6, 8, 8, 8, 8, 0, 7, 8, 8, 8, 8, 7, 7, 7, 7, 7, 7, 7, 7, 8, 4, 4, 4, 4, 12, 6, 6, 6, 6, 12, 6, 6, 6, 6, 6, 6, 6, 7, 7, 7, 7, 7, 7, 7, 7, 6, 4, 4, 4, 12, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 7, 7, 7, 7, 7, 7, 7, 7, 7, 6, 4, 4, 6, 12, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 8, 7, 7, 7, 7, 7, 7, 7, 7, 12, 4, 4, 4, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 8, 7, 7, 7, 7, 7, 7, 7, 7, 7, 6, 4, 4, 6, 12, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 7, 7, 7, 7, 7, 7, 7, 7, 8, 8, 6, 6, 4, 12, 7, 12, 6, 6, 6, 6, 6, 6, 6, 6, 7, 7, 7, 7, 7, 7, 7, 8, 8, 8, 8, 4, 6, 4, 7, 7, 7, 7, 6, 6, 8, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 8, 8, 2, 8, 0, 6, 6, 8, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 8, 2, 2, 2, 2, 8, 6, 8, 8, 8, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 8, 8, 2, 2, 2, 2, 8, 8, 8, 8, 8, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 8, 2, 2, 2, 2, 2, 2, 8, 8, 8, 8, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 8, 2, 2, 2, 2, 2, 2, 2, 2, 8, 8, 8, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 8, 2, 2, 2, 2, 2, 2, 2, 2, 2, 8, 8, 8, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 8, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 8, 8, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 8, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 8, 8, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7
-;img2 db 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 7, 7, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 8, 7, 15, 15, 15, 7, 8, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 8, 15, 15, 15, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 15, 15, 0, 8, 0, 0, 0, 0, 0, 0, 15, 15, 15, 15, 15, 15, 15, 15, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15, 15, 0, 0, 7, 8, 0, 0, 0, 0, 0, 0, 0, 0, 7, 7, 7, 7, 7, 7, 0, 8, 0, 0, 0, 0, 0, 0, 0, 7, 8, 7, 15, 15, 15, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 7, 8, 8, 15, 15, 15, 0, 0, 8, 0, 0, 0, 0, 0, 15, 15, 15, 15, 15, 15, 15, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15, 15, 0, 0, 7, 8, 0, 0, 0, 0, 0, 0, 0, 0, 7, 7, 7, 7, 7, 7, 0, 8, 0, 0, 0, 0, 0, 0, 0, 7, 8, 8, 15, 15, 15, 0, 0, 8, 0, 0, 0, 0, 0, 15, 15, 15, 15, 15, 15, 15, 15, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 7, 7, 7, 7, 7, 8, 0, 0, 0, 0, 0, 0, 0, 0, 7, 8, 7, 15, 15, 15, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 7, 8, 8, 15, 15, 15, 0, 8, 0, 0, 0, 0, 0, 0, 15, 15, 15, 15, 15, 15, 15, 15, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-readpixel:
-
-    mov cx,25 ; altura da imagem
-    mul cx; 
-    add ax,bx 
-    mov di,ax
-    mov al, [img+di]
-
-    ret
-
-; esta função tem como argumentos AX=coordY, BX=coordX, e a cor que será pushada na pilha
-putpixel:
-
-    push ebp
-    mov ebp, esp
-
-    mov cx,320 ; image width
-    mul cx
-    add ax,bx 
-    mov di,ax
-    mov dx, [ebp+6]
-    mov [es:di],dl
-
-    pop ebp
-
-    ret
-
-; a largura e a altura da imagem devem ser empilhadas em 2bytes
-print_img:
-
-    push ebp
-    mov ebp, esp
-
-
-    mov ax,[ebp+6] ; Y coord
-
-    .loop:
-
-    dec ax
-    mov bx, [ebp+8] ; X coord
-
-    .loop1:
-
-    dec bx
-
-    push ax
-    push bx
-    call readpixel
-    mov dl, al
-    pop bx
-    pop ax
-
-    ;mov dl, 8;
-    add ax, [ebp+10]
-    add bx, [ebp+12]
-
-    push ax
-    push bx
-    push dx
-    call putpixel
-    pop dx
-    pop bx
-    pop ax
-
-
-    sub bx, [ebp+12]
-    sub ax, [ebp+10]
-
-
-    cmp bx, 0
-    jne .loop1
-
-
-    cmp ax, 0
-    jne .loop
-
-    pop ebp
-
-    ret
-
-clear_screen:
-    mov ax, 200 ; Y coord
-    .loop:
-
-    mov bx, 320 ; X coord
-    .loop1:
-
-    mov dl, 8;
-
-    push ax
-    push bx
-    push dx
-    call putpixel
-    pop dx
-    pop bx
-    pop ax
-
-    dec bx
-
-    cmp bx, 0
-    jge .loop1
-
-    dec ax
-
-    cmp ax, 0
-    jge .loop
-
-    ret
-
 init:
     xor ax, ax
     mov ds, ax
     mov es, ax
+    ; Go into mode 13h: 320x200x256
+    mov ah, 0
+    mov al, 13h
+    int 10h
+    ret	
 
-    mov ax, 13h ; AH=0 (Change video mode), AL=13h (Mode)
-    int 10h ; Video BIOS interrupt
+_put_pixel: ; (x, y, color)
 
-    mov ax, 0A000h ; The offset to video memory
-    mov es, ax ; We load it to ES through AX, becouse immediate operation is not allowed on ES
+    mov bp, sp          ; we can't index the sp, so we use bp
+
+    mov ax, 0a000h      
+    mov es, ax          ; set the es with the VGA VIDEO RAM segment adress.
+  
+    mov ax, [bp+2]         ; y position
+    mov cx, 320         ; width in pixels of the screen
+    mul cx              ; update ax (and dx?) with the result
+    add ax, [bp+4]         ; add x position to result   
+    
+    mov bx, ax
+    mov al, [bp+6]
+    es mov [bx], al 
 
     ret
-	
-start:
-    call init
 
-    mov ax, 100
-    mov bx, 100
-
-    call clear_screen
-
-    .loop:
+%macro put_pixel 3
     push ax
     push bx
-    pop bx
-    pop ax
+    push cx
+    push dx
+    push bp
+    push es
 
-    and ax, 0xffff
-    and bx, 0xffff
+    push %3
+    push %1
+    push %2
+    
+    call _put_pixel
 
-    ;mov ax, 100 ; dest x 
-    push ax
+    add sp, 6
+    pop es
+    pop bp
+    pop dx
+    pop cx
+    pop bx    
+    pop ax
+%endmacro
 
-    sar ax, 8
+_draw_vertical_line: ; (x, y1, y2, color)
+    mov bp, sp 
 
-    push ax
-    ;mov ax, bx ; dest y 
-    push ax
-    mov ax, 26 ; img W
-    push ax
-    mov ax, 26 ; img H
-    push ax
-    call print_img
-    pop ax
-    pop ax
-    pop bx
-    pop ax
-    pop ax
+    mov ax, [bp+2]  ; x
+    mov bx, [bp+4]  ; y1
+    mov cx, [bp+6]  ; y2
+    mov dx, [bp+8]  ; color
 
-    add ax, 1
+    .draw_vertical_line_loop:
+    put_pixel ax, bx, dx
     add bx, 1
+    cmp bx, cx
+    jl .draw_vertical_line_loop
+
+    ret
+
+%macro draw_vertical_line 4
+    push ax
+    push bx
+    push cx
+    push dx
+    push bp
+    push es
+
+    push %4
+    push %3
+    push %2
+    push %1
+
+    call _draw_vertical_line
+
+    add sp, 8
+    pop es
+    pop bp
+    pop dx
+    pop cx
+    pop bx    
+    pop ax
+%endmacro
+
+_draw_horizontal_line: ; (y, x1, x2, color)
+    mov bp, sp 
+
+    mov ax, [bp+2]  ; y
+    mov bx, [bp+4]  ; x1
+    mov cx, [bp+6]  ; x2
+    mov dx, [bp+8]  ; color
+
+    .draw_horizontal_line_loop:
+    put_pixel bx, ax, dx
+    add bx, 1
+    cmp bx, cx
+    jl .draw_horizontal_line_loop
+
+    ret
+
+%macro draw_horizontal_line 4
+    push ax
+    push bx
+    push cx
+    push dx
+    push bp
+    push es
+
+    push %4
+    push %3
+    push %2
+    push %1
+
+    call _draw_horizontal_line
+
+    add sp, 8
+    pop es
+    pop bp
+    pop dx
+    pop cx
+    pop bx    
+    pop ax
+%endmacro
+
+; TODO: finish implementation of this function
+; _draw_square: ; (x, y, width, color)
+
+;     mov bp, sp
+
+;     .draw_square_loop:
+    
+;     jl .draw_square_loop
+    
+;     ret
+
+; %macro draw_square 4
+;     push ax
+;     push bx
+;     push cx
+;     push dx
+;     push bp
+;     push es
+
+;     push %4
+;     push %3
+;     push %2
+;     push %1
+
+;     call _draw_square
+
+;     add sp, 8
+;     pop es
+;     pop bp
+;     pop dx
+;     pop cx
+;     pop bx    
+;     pop ax
+; %endmacro
 
 
-    jmp .loop
 
+start:
+    call init 
+
+    ; Everything under this is to draw the hi message (just a test, you can delet this.)
+
+    .start_over_color_loop:
+    mov ax, 1
+    mov bx, 2
+    mov cx, 3
+
+    .start_color_loop:
+    inc ax
+    inc bx
+    inc cx
+
+
+    ;H
+    draw_horizontal_line 50, 40, 80, ax
+    draw_horizontal_line 100, 80, 120, ax
+    draw_horizontal_line 50, 120, 160, ax
+    draw_horizontal_line 198, 40, 80, ax
+    draw_horizontal_line 150, 80, 120, ax
+    draw_horizontal_line 198, 120, 160, ax
+
+    draw_vertical_line 40, 50, 199, ax
+    draw_vertical_line 80, 50, 100, ax
+    draw_vertical_line 80, 150, 199, ax
+    draw_vertical_line 119, 50, 100, ax
+    draw_vertical_line 120, 150, 199, ax
+    draw_vertical_line 160, 50, 199, ax
+
+    ;I
+
+    draw_horizontal_line 13, 200, 240, bx
+    draw_horizontal_line 39, 200, 240, bx
+    draw_horizontal_line 50, 200, 240, bx
+    draw_horizontal_line 199, 200, 240, bx
+
+
+    draw_vertical_line 200, 13, 39, bx
+    draw_vertical_line 200, 50, 199, bx
+    draw_vertical_line 239, 13, 39, bx
+    draw_vertical_line 239, 50, 199, bx
+
+    ;!
+    draw_horizontal_line 25, 280, 315, cx
+    draw_horizontal_line 150, 280, 315, cx
+    draw_horizontal_line 175, 280, 315, cx 
+    draw_horizontal_line 199, 280, 315, cx
+
+
+    draw_vertical_line 280, 25, 150, cx
+    draw_vertical_line 280, 175, 199, cx
+    draw_vertical_line 314, 25, 150, cx
+    draw_vertical_line 314, 175, 199, cx
+
+    cmp cx, 15
+    jl .start_color_loop
+    je .start_over_color_loop
+
+end:
 
 jmp $
