@@ -200,7 +200,7 @@ _clear_screen:
 %endmacro
 
 
-; I know that the code below in this macro is dumb. I'm just testing something really quick, don't judge me Ò_Ó, in the final version, we should use loops.
+; I know that the code below in this macro is dumb. I'm just testing something really quick, don't judge me Ò_Ó, in the final version, we should use loops. But keep in mind there's not enough registers available, so we'll have to use a variable on the stack.
 %macro dumb_macro_to_draw_square 1
     draw_horizontal_line bx, ax, cx, %1
     inc bx
