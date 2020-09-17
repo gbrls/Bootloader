@@ -31,10 +31,16 @@ delay:
 
     ret
 
+;TODO: implementar uma função para printar números até 99
+print_num:
+    call print_char
+    ret
+
 print_char:
     pusha
 
     ;mov bl, 2 ; qual cor
+
     mov ah, 0xe
     int 10h
 
@@ -62,7 +68,7 @@ print_array:
         lodsb
         add al, '0'
 
-        call print_char
+        call print_num
 
     dec cl
     cmp cl, 0
