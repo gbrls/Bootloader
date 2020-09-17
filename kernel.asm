@@ -3,10 +3,11 @@ jmp 0x0000:start
 
 data:
 	;vetor TIMES 10 DW 0
-    v db 3, 4, 1, 7, 6, 2, 9
-    n db 7
+    v TIMES 100 db 0
+    n db 0
     i db 0
     j db 0
+    aux db 0
 	;Dados do projeto...
 
 init_video:
@@ -39,12 +40,19 @@ print_num:
 print_char:
     pusha
 
-    ;mov bl, 2 ; qual cor
-
+    
     mov ah, 0xe
     int 10h
 
     popa
+    ret
+
+jmp_line:
+    mov ah, 02h            
+    mov bh, 0
+    add dh, 1
+    mov dl, 0
+    int 10h
     ret
 
 newline:
@@ -135,12 +143,127 @@ sort:
 
     ret
 
+get_n: 
+
+    xor ah, ah
+    int 16h
+
+    mov ah, 0xe
+    mov bh, 0
+    mov bl, 2
+    int 10h
+
+    sub al, '0'
+    mov [n], al
+
+    xor ah, ah
+    int 16h
+    
+    mov ah, 0xe
+    mov bh, 0
+    mov bl, 2
+    int 10h
+
+    cmp al, 13
+    je .end
+
+    sub al, '0'
+    mov [aux], al
+
+    mov al, [n]
+    mov cl, 10
+    mul cl
+
+    add al, [aux]
+    mov [n], al
+
+    xor ah, ah
+    int 16h
+    
+    mov ah, 0xe
+    mov bh, 0
+    mov bl, 2
+    int 10h
+    .end:
+        call jmp_line
+        ret
+
+getValue:
+    xor ah, ah
+    int 16h
+
+    mov ah, 0xe
+    mov bh, 0
+    mov bl, 2
+    int 10h
+
+    sub al, '0'
+    mov dl, al
+
+    xor ah, ah
+    int 16h
+    
+    mov ah, 0xe
+    mov bh, 0
+    mov bl, 2
+    int 10h
+
+    cmp al, 13
+    je .end
+
+    sub al, '0'
+    mov [aux], al
+
+    mov al, dl
+    mov bl, 10
+    mul bl
+
+    add al, [aux]
+    mov dl, al
+
+    xor ah, ah
+    int 16h
+    
+    mov ah, 0xe
+    mov bh, 0
+    mov bl, 2
+    int 10h
+
+    .end:
+        ret
+
+get_array:
+
+    mov si, v
+    mov cl, [n]
+
+    .loop:
+
+        call getValue
+
+        mov [si], dl
+
+        inc si
+
+        dec cl
+        cmp cl, 0
+        jg .loop
+
+    ret
+
+
+entradas:
+    call get_n
+    call get_array
+    ret
+
 start:
     xor ax, ax
     mov ds, ax
     mov es, ax
 
     call init_video
+    call entradas
     call sort
 
 jmp $
