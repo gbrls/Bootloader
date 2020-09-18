@@ -10,6 +10,7 @@ data:
     i db 0
     j db 0
     aux db 0
+    cor db 3
 	;Dados do projeto...
 
 init_video:
@@ -25,7 +26,7 @@ delay:
     ; http://www.techhelpmanual.com/221-int_15h_86h__wait.html
 
     mov ah, 86h
-    mov cx, 00
+    mov cx, 01
     mov dx, 0x0F00
 
     int 15h
@@ -63,6 +64,7 @@ print_num:
 print_char:
     pusha
 
+    mov bl, [cor]
     
     mov ah, 0xe
     int 10h
@@ -157,6 +159,7 @@ sort:
     mov bl, [n]
 
     .inner_loop:
+        mov [cor], bl
         call print_array
         mov al, [si]
         mov cl, [si+1]
