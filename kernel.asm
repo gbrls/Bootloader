@@ -19,32 +19,19 @@ init_video:
 
     ret
 
-delay1:
+delay:
     pusha
 
     ; http://www.techhelpmanual.com/221-int_15h_86h__wait.html
 
     mov ah, 86h
     mov cx, 00
-    mov dx, 00
+    mov dx, 0x0F00
 
     int 15h
 
     popa
 
-    ret
-
-delay:
-    pusha
-
-    mov cl, 30
-    .loop:
-        dec cl
-        call delay1
-        cmp cl, 0
-        jne .loop
-
-    popa
     ret
 
 ;TODO: implementar uma função para printar números até 99
