@@ -5,12 +5,15 @@ data:
 	;vetor TIMES 10 DW 0
     str1 db 'Digite o tamanho do vetor: ', 13, 10, 0
     str2 db 'Digite o vetor: ', 13, 10, 0
+    str_test db 'Pressione qualquer tecla', 13, 10, 0
     v TIMES 100 db 0
     n db 0
     i db 0
     j db 0
     aux db 0
     cor db 3
+    state dw 1
+    jump_table dw sort_fn, test_fn
 	;Dados do projeto...
 
 init_video:
@@ -20,13 +23,94 @@ init_video:
 
     ret
 
+_put_pixel: ; (x, y, color)
+
+    mov bp, sp          ; we can't index the sp, so we use bp
+
+    mov ax, 0a000h      
+    mov es, ax          ; set the es with the VGA VIDEO RAM segment adress.
+  
+    mov ax, [bp+2]         ; y position
+    mov cx, 320         ; width in pixels of the screen
+    mul cx              ; update ax (and dx?) with the result
+    add ax, [bp+4]         ; add x position to result   
+    
+    mov bx, ax
+    mov al, [bp+6]
+    es mov [bx], al 
+
+    ret
+
+%macro put_pixel 3
+    push ax
+    push bx
+    push cx
+    push dx
+    push bp
+    push es
+
+    push %3
+    push %1
+    push %2
+    
+    call _put_pixel
+
+    add sp, 6
+    pop es
+    pop bp
+    pop dx
+    pop cx
+    pop bx    
+    pop ax
+%endmacro
+
+_draw_horizontal_line: ; (y, x1, x2, color)
+    mov bp, sp 
+
+    mov ax, [bp+2]  ; y
+    mov bx, [bp+4]  ; x1
+    mov cx, [bp+6]  ; x2
+    mov dx, [bp+8]  ; color
+
+    .draw_horizontal_line_loop:
+    put_pixel bx, ax, dx
+    add bx, 1
+    cmp bx, cx
+    jl .draw_horizontal_line_loop
+
+    ret
+
+%macro draw_horizontal_line 4
+    push ax
+    push bx
+    push cx
+    push dx
+    push bp
+    push es
+
+    push %4
+    push %3
+    push %2
+    push %1
+
+    call _draw_horizontal_line
+
+    add sp, 8
+    pop es
+    pop bp
+    pop dx
+    pop cx
+    pop bx    
+    pop ax
+%endmacro
+
 delay:
     pusha
 
     ; http://www.techhelpmanual.com/221-int_15h_86h__wait.html
 
     mov ah, 86h
-    mov cx, 01
+    mov cx, 00
     mov dx, 0x0F00
 
     int 15h
@@ -302,14 +386,72 @@ entradas:
     call get_array
     ret
 
+clear_screen: 
+    pusha
+
+    mov ah, 02h
+    mov bh, 0
+    mov dh, 0
+    mov dl, 0
+    int 10h
+
+    mov bx, 0 ; y
+    .clear_screen_line_loop:
+    draw_horizontal_line bx, 0, 320, 0
+    inc bx
+    cmp bx, 200
+    jl .clear_screen_line_loop   
+    popa
+    ret
+
+sort_fn:
+    call entradas
+    call jmp_line
+    call sort
+
+
+    call clear_screen
+
+    mov ax, 1
+    mov [state], ax
+
+    ret
+
+test_fn:
+    mov si, str_test
+    call print_str
+
+
+    xor ah, ah
+    int 16h
+
+    mov al, 13
+    call print_char
+
+    mov ax, 0
+    mov [state], ax
+    
+    ret
+
 start:
     xor ax, ax
     mov ds, ax
     mov es, ax
 
     call init_video
-    call entradas
-    call jmp_line
-    call sort
+
+    ; Loop para mudar de estados
+    ; Cada estado precisa ter uma função que modifica o valor de state para
+    ; o próximo estado, esta função deve ser adicionada ao array jump_table
+    ; talvez umas macros possam ajudar para deixar o código mais legível, com
+    ; alguma coisa parecida com Enums
+    .loop: 
+    
+    mov ax, [state]
+    mov bx, 2
+    mul bx
+    call [jump_table+eax]
+
+    jmp .loop
 
 jmp $
