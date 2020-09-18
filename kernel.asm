@@ -3,6 +3,8 @@ jmp 0x0000:start
 
 data:
 	;vetor TIMES 10 DW 0
+    str1 db 'Digite o tamanho do vetor: ', 13, 10, 0
+    str2 db 'Digite o vetor: ', 13, 10, 0
     v TIMES 100 db 0
     n db 0
     i db 0
@@ -17,14 +19,14 @@ init_video:
 
     ret
 
-delay:
+delay1:
     pusha
 
     ; http://www.techhelpmanual.com/221-int_15h_86h__wait.html
 
     mov ah, 86h
-    mov cx, 01
-    mov bx, 100
+    mov cx, 00
+    mov dx, 00
 
     int 15h
 
@@ -32,9 +34,43 @@ delay:
 
     ret
 
+delay:
+    pusha
+
+    mov cl, 30
+    .loop:
+        dec cl
+        call delay1
+        cmp cl, 0
+        jne .loop
+
+    popa
+    ret
+
 ;TODO: implementar uma função para printar números até 99
 print_num:
+    pusha
+
+    xor ah, ah
+    mov bl, 10
+    div bl
+
+    ;al = quociente
+    ;ah = resto
+
+    cmp al, 0
+    je flag
+
+    add al, '0'
     call print_char
+
+    flag:
+
+        mov al ,ah
+        add al, '0'
+        call print_char
+
+    popa
     ret
 
 print_char:
@@ -64,6 +100,22 @@ newline:
     popa
     ret
 
+print_str:
+
+    lodsb
+
+    cmp al, 13
+    je done
+
+    mov ah,0xe
+    mov bl, 2
+    int 10h
+
+    jmp print_str
+
+    done:
+        ret
+
 print_array:
     pusha
 
@@ -74,9 +126,10 @@ print_array:
         call delay
 
         lodsb
-        add al, '0'
 
         call print_num
+        mov al, ' '
+        call print_char
 
     dec cl
     cmp cl, 0
@@ -145,13 +198,13 @@ sort:
 
 get_n: 
 
+    mov si, str1
+    call print_str
+
     xor ah, ah
     int 16h
 
-    mov ah, 0xe
-    mov bh, 0
-    mov bl, 2
-    int 10h
+    call print_char
 
     sub al, '0'
     mov [n], al
@@ -159,10 +212,7 @@ get_n:
     xor ah, ah
     int 16h
     
-    mov ah, 0xe
-    mov bh, 0
-    mov bl, 2
-    int 10h
+    call print_char
 
     cmp al, 13
     je .end
@@ -180,22 +230,18 @@ get_n:
     xor ah, ah
     int 16h
     
-    mov ah, 0xe
-    mov bh, 0
-    mov bl, 2
-    int 10h
+    call print_char
+
     .end:
         call jmp_line
         ret
 
 getValue:
+
     xor ah, ah
     int 16h
 
-    mov ah, 0xe
-    mov bh, 0
-    mov bl, 2
-    int 10h
+    call print_char
 
     sub al, '0'
     mov dl, al
@@ -203,10 +249,7 @@ getValue:
     xor ah, ah
     int 16h
     
-    mov ah, 0xe
-    mov bh, 0
-    mov bl, 2
-    int 10h
+    call print_char
 
     cmp al, 13
     je .end
@@ -224,15 +267,16 @@ getValue:
     xor ah, ah
     int 16h
     
-    mov ah, 0xe
-    mov bh, 0
-    mov bl, 2
-    int 10h
+    call print_char
 
     .end:
         ret
 
 get_array:
+
+    mov si, str2
+    call print_str
+    call jmp_line
 
     mov si, v
     mov cl, [n]
@@ -240,6 +284,7 @@ get_array:
     .loop:
 
         call getValue
+
 
         mov [si], dl
 
@@ -264,6 +309,7 @@ start:
 
     call init_video
     call entradas
+    call jmp_line
     call sort
 
 jmp $
