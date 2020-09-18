@@ -241,7 +241,7 @@ getValue:
     
     call print_char
 
-    cmp al, 13
+    cmp al, 13 ; Pressinou espaço?
     je .end
 
     sub al, '0'
@@ -260,6 +260,16 @@ getValue:
     call print_char
 
     .end:
+        mov al, 13
+        call print_char
+
+        mov al, ' '
+        call print_char
+        mov al, ' '
+        call print_char
+
+        mov al, 13
+        call print_char
         ret
 
 get_array:
