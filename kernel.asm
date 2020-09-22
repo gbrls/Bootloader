@@ -163,6 +163,10 @@ print_num:
     popa
     ret
 
+putc:
+    call print_char
+    ret
+
 print_char:
     pusha
 
@@ -174,29 +178,18 @@ print_char:
     popa
     ret
 
-jmp_line:
-
+endl:
     mov al, 13
-    call print_char
-
+    call putc
     mov al, 10
-    call print_char
+    call putc
 
-    ret
-
-newline:
-    pusha
-    mov al, 13 ; mover o cursor para o inicio da linha
-    call print_char
-    ;mov al, 10 ; descer o cursor uma linha
-    ;call print_char
-    popa
     ret
 
 ; printa uma string  terminada com '0'
 print_str:
 
-    DELAY 0, 0x4000
+    DELAY 0, 0x8000
     
     lodsb
 
@@ -230,7 +223,8 @@ print_array:
     cmp cl, 0
     jg .loop
     
-    call newline
+    mov al, 13 ; mover o cursor para o inicio da linha
+    call putc
 
     popa
     ret
@@ -342,7 +336,7 @@ get_n:
     call print_char
 
     .end:
-        call jmp_line
+        call endl
         ret
 
 getValue:
@@ -401,6 +395,7 @@ get_array:
 
     .loop:
 
+        call cursor
         call getValue
 
 
@@ -443,9 +438,13 @@ sort_fn:
     mov [cor], al
 
     call entradas
-    call jmp_line
     call sort
 
+    mov al, 10
+    mov [cor], al
+
+    call endl
+    call cursor
     call getc ; esperar o usuario digitar
     call clear_screen
 
@@ -483,11 +482,16 @@ homescreen_fn:
     ret
 
 cursor:
+    pusha
+
+    mov bl, 10
     mov bh, 0
     mov cx, 1
     mov al, '_'
-    mov ah, 0ah
+    mov ah, 09h
     int 10h
+
+    popa
 
     ret
 
