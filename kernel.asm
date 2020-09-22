@@ -6,6 +6,9 @@ data:
     str1 db 'Digite o tamanho do vetor: ', 13, 10, 0
     str2 db 'Digite o vetor: ', 13, 10, 0
     str_test db 'Pressione qualquer tecla', 13, 10, 0
+
+    mensagemi db 'Sistema operacional X - Ver 0.0.1',13,10,'Empresa de software Ltda. (1984)',13,10,0
+
     v TIMES 100 db 0
     n db 0
     i db 0
@@ -104,19 +107,34 @@ _draw_horizontal_line: ; (y, x1, x2, color)
     pop ax
 %endmacro
 
-delay:
-    pusha
-
+_delay:
+    push ax
     ; http://www.techhelpmanual.com/221-int_15h_86h__wait.html
 
     mov ah, 86h
-    mov cx, 00
-    mov dx, 0x0F00
 
     int 15h
 
-    popa
+    pop ax
+    ret
 
+%macro DELAY 2
+    push cx
+    push dx
+
+    mov cx, %1
+    mov dx, %2
+
+    call _delay
+
+    pop dx
+    pop cx
+
+%endmacro
+
+getc:
+    xor ah, ah
+    int 16h
     ret
 
 ;TODO: implementar uma função para printar números até 99
@@ -173,20 +191,23 @@ newline:
     popa
     ret
 
+; printa uma string  terminada com '0'
 print_str:
 
+    DELAY 0, 0x4000
+    
     lodsb
 
-    cmp al, 13
-    je done
+    cmp al, 0
+    je .done
 
     mov ah,0xe
-    mov bl, 2
+    mov bl, 10
     int 10h
 
     jmp print_str
 
-    done:
+    .done:
         ret
 
 print_array:
@@ -196,8 +217,6 @@ print_array:
     mov cl, [n]
 
     .loop:
-        call delay
-
         lodsb
 
         call print_num
@@ -229,7 +248,6 @@ sort:
     push ebp
     mov ebp, esp
 
-
     mov bh, [n]
 
     ; Vamos chamar o outer loop n vezes
@@ -243,7 +261,21 @@ sort:
     mov bl, [n]
 
     .inner_loop:
-        mov [cor], bl
+        
+        push cx
+        push dx
+        mov cx, 0Fh
+        mov dx, 0
+
+        DELAY 0x1, 0x0
+
+        pop dx
+        pop cx
+
+        inc bh
+        mov [cor], bh
+        dec bh
+
         call print_array
         mov al, [si]
         mov cl, [si+1]
@@ -405,14 +437,17 @@ clear_screen:
     ret
 
 sort_fn:
+    mov al, 3
+    mov [cor], al
+
     call entradas
     call jmp_line
     call sort
 
-
+    call getc ; esperar o usuario digitar
     call clear_screen
 
-    mov ax, 1
+    mov ax, test_fn
     mov [state], ax
 
     ret
@@ -421,15 +456,26 @@ test_fn:
     mov si, str_test
     call print_str
 
-
-    xor ah, ah
-    int 16h
+    call getc
 
     mov al, 13
     call print_char
 
-    mov ax, 0
+    mov ax, sort_fn
     mov [state], ax
+    
+    ret
+
+homescreen_fn:
+    
+    mov si, mensagemi
+    call print_str
+
+    mov ax, test_fn
+    mov [state], ax
+
+    call getc
+    call clear_screen
     
     ret
 
@@ -440,17 +486,16 @@ start:
 
     call init_video
 
+    mov ax, homescreen_fn
+    mov [state], ax
+
     ; Loop para mudar de estados
     ; Cada estado precisa ter uma função que modifica o valor de state para
-    ; o próximo estado, esta função deve ser adicionada ao array jump_table
-    ; talvez umas macros possam ajudar para deixar o código mais legível, com
-    ; alguma coisa parecida com Enums
+    ; a label do próximo estado
     .loop: 
     
     mov ax, [state]
-    mov bx, 2
-    mul bx
-    call [jump_table+eax]
+    call eax
 
     jmp .loop
 
