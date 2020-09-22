@@ -6,7 +6,7 @@ data:
     str1 db 'Digite o tamanho do vetor: ', 13, 10, 0
     str2 db 'Digite o vetor: ',13,10,0
     str_test db 'Pressione qualquer tecla', 13, 10, 0
-    comandos db 'ls - Lista os comandos disponiveis.',13,10,'bubble - Veja o bubble sort em acao.',13,10,'about - Informacoes sobre o sistema.',13,10,'maze - Gere um quase labirinto',13,10,0
+    comandos db 'ls - Lista os comandos disponiveis.',13,10,'bubble - Veja o bubble sort em acao.',13,10,'selection - Veja o selection em acao.',13,10,'about - Informacoes sobre o sistema.',13,10,'maze - Gere um quase labirinto',13,10,0
 
     mensagemi db 'Sistema operacional X - Ver 0.0.1',13,10,'Empresa de software Ltda. (1984)',13,10,0
 
@@ -17,7 +17,7 @@ data:
     ; array com o comando para cada char
     
     ;      a            b   c   c ...
-    ctable dw about_fn, sort_fn, ef, ef, ef, ef, ef, ef, ef, ef, ef, ls_fn, maze_fn, ef, ef, ef, ef, ef, ef, ef, ef, ef, ef, ef, ef, ef
+    ctable dw about_fn, sort_fn, ef, ef, ef, ef, ef, ef, ef, ef, ef, ls_fn, maze_fn, ef, ef, ef, ef, ef, s_sort, ef, ef, ef, ef, ef, ef, ef
 
     v TIMES 100 db 0
     n db 0
@@ -248,6 +248,95 @@ swap:
 
     popa
     ret
+
+selec_swap:
+
+    mov al, [bp]
+    mov bl, [di]
+    mov [di], al
+    mov [bp], bl
+
+    dec di
+
+    
+    ret
+
+selection:
+
+    mov bh, [n]
+    mov di, v
+    mov ax, [n]
+    dec ax
+    add di, ax
+
+    .outer_loop:
+
+        mov si, v
+        mov bl, bh
+
+        mov bp, si  
+
+
+        .inner_loop:
+            
+            push cx
+            push dx
+            mov cx, 0Fh
+            mov dx, 0
+
+            DELAY 0x2, 0x0
+
+            pop dx
+            pop cx
+
+            inc bh
+            mov [cor], bh
+            dec bh
+
+            call print_array
+
+            mov al, [si]
+            mov cl, [bp]
+            cmp cl, al
+
+            jg .end_inner_loop
+
+            mov bp, si    ;Salva o index onde o maior elemento se encontra
+            
+
+
+    .end_inner_loop:
+
+        inc si
+        dec bl
+
+    cmp bl, 0
+    jg .inner_loop
+
+    call selec_swap  
+    dec bh
+    cmp bh, 0
+    jg .outer_loop
+
+    ret 
+
+s_sort:
+    mov al, 3
+    mov [cor], al
+
+    call entradas
+    call selection
+
+    mov al, 10
+    mov [cor], al
+
+    call endl
+    call cursor
+    call getc ; esperar o usuario digitar
+    ;call clear_screen
+    call exit_to_shell
+
+    ret
     
 sort:
     push ebp
@@ -362,7 +451,7 @@ getValue:
     
     call print_char
 
-    cmp al, 13 ; Pressinou espaço?
+    cmp al, 13 ; Pressionou espaço?
     je .end
 
     sub al, '0'
