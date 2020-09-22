@@ -6,18 +6,18 @@ data:
     str1 db 'Digite o tamanho do vetor: ', 13, 10, 0
     str2 db 'Digite o vetor: ',13,10,0
     str_test db 'Pressione qualquer tecla', 13, 10, 0
-    comandos db 'ls - Lista os comandos disponiveis.',13,10,'bubble - Veja o bubble sort em acao.',13,10,'about - Informacoes sobre o sistema.',13,10,0
+    comandos db 'ls - Lista os comandos disponiveis.',13,10,'bubble - Veja o bubble sort em acao.',13,10,'about - Informacoes sobre o sistema.',13,10,'maze - Gere um quase labirinto',13,10,0
 
     mensagemi db 'Sistema operacional X - Ver 0.0.1',13,10,'Empresa de software Ltda. (1984)',13,10,0
 
-    erro_msg db 'Comando nao reconhecido :(',13,10,0
+    erro_msg db 'Comando nao reconhecido (o_o)',13,10,0
     about_msg db 'Esse sistema foi desenvolvido por ...',13,10,0
     sprompt db 'MY-PC>',0
 
     ; array com o comando para cada char
     
     ;      a            b   c   c ...
-    ctable dw about_fn, sort_fn, ef, ef, ef, ef, ef, ef, ef, ef, ef, ls_fn, ef, ef, ef, ef, ef, ef, ef, ef, ef, ef, ef, ef, ef, ef
+    ctable dw about_fn, sort_fn, ef, ef, ef, ef, ef, ef, ef, ef, ef, ls_fn, maze_fn, ef, ef, ef, ef, ef, ef, ef, ef, ef, ef, ef, ef, ef
 
     v TIMES 100 db 0
     n db 0
@@ -450,7 +450,7 @@ sort_fn:
     call endl
     call cursor
     call getc ; esperar o usuario digitar
-    call clear_screen
+    ;call clear_screen
     call exit_to_shell
 
     ret
@@ -552,6 +552,43 @@ shell_fn:
 exit_to_shell:
     mov ax, shell_fn
     mov [state], ax
+
+    ret
+
+maze_fn:
+    call clear_screen
+
+    mov bx, 1200
+    mov ax, 3
+    .loop:
+
+    inc ax
+    add ax, bx
+    dec bx
+
+    push ax
+
+    shr ax, 5
+    and ax, 1
+    cmp ax, 0
+    je .b
+
+    .a:
+    mov al, '/'
+    jmp .c
+    .b:
+    mov al, '\'
+    jmp .c
+    .c:
+    call putc
+    pop ax
+
+    cmp bx, 0
+    jne .loop
+
+    call getc
+    call clear_screen
+    call exit_to_shell
 
     ret
 
