@@ -17,7 +17,7 @@ data:
     ; array com o comando para cada char
     
     ;      a            b   c   c ...
-    ctable dw about_fn, sort_fn, ef, ef, ef, ef, ef, ef, ef, ef, ef, ls_fn, maze_fn, ef, ef, ef, ef, ef, ef, ef, ef, ef, ef, ef, ef, ef
+    ctable dw about_fn, bubble_fn, ef, ef, ef, ef, ef, ef, ef, ef, ef, ls_fn, maze_fn, ef, ef, ef, ef, ef, ef, ef, ef, ef, ef, ef, ef, ef
 
     v TIMES 100 db 0
     n db 0
@@ -249,7 +249,7 @@ swap:
     popa
     ret
     
-sort:
+bubble_sort:
     push ebp
     mov ebp, esp
 
@@ -437,12 +437,12 @@ clear_screen:
     popa
     ret
 
-sort_fn:
+bubble_fn:
     mov al, 3
     mov [cor], al
 
     call entradas
-    call sort
+    call bubble_sort
 
     mov al, 10
     mov [cor], al
@@ -464,7 +464,7 @@ test_fn:
     mov al, 13
     call print_char
 
-    mov ax, sort_fn
+    mov ax, bubble_fn
     mov [state], ax
     
     ret
