@@ -451,9 +451,7 @@ sort_fn:
     call cursor
     call getc ; esperar o usuario digitar
     call clear_screen
-
-    mov ax, shell_fn
-    mov [state], ax
+    call exit_to_shell
 
     ret
 
@@ -472,16 +470,9 @@ test_fn:
     ret
 
 homescreen_fn:
-    
     mov si, mensagemi
     call print_str
-    ;call cursor
-
-    mov ax, shell_fn
-    mov [state], ax
-
-    ;call getc
-    ;call clear_screen
+    call exit_to_shell
     
     ret
 
@@ -502,29 +493,22 @@ cursor:
 ls_fn:
     mov si, comandos
     call print_str
+    call exit_to_shell
 
-    mov ax, shell_fn
-    mov [state], ax
     ret
 
 ; funcao para msg de erro
 ef:
     mov si, erro_msg
     call print_str
-
-
-    mov ax, shell_fn
-    mov [state], ax
+    call exit_to_shell
 
     ret
 
 about_fn:
     mov si, about_msg
     call print_str
-
-
-    mov ax, shell_fn
-    mov [state], ax
+    call exit_to_shell
 
     ret
 
@@ -565,6 +549,11 @@ shell_fn:
 
     ret
 
+exit_to_shell:
+    mov ax, shell_fn
+    mov [state], ax
+
+    ret
 
 start:
     xor ax, ax
