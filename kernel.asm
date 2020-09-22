@@ -4,7 +4,7 @@ jmp 0x0000:start
 data:
 	;vetor TIMES 10 DW 0
     str1 db 'Digite o tamanho do vetor: ', 13, 10, 0
-    str2 db 'Digite o vetor: ', 13, 10, 0
+    str2 db 'Digite o vetor: ',13,10,0
     str_test db 'Pressione qualquer tecla', 13, 10, 0
 
     mensagemi db 'Sistema operacional X - Ver 0.0.1',13,10,'Empresa de software Ltda. (1984)',13,10,0
@@ -175,11 +175,13 @@ print_char:
     ret
 
 jmp_line:
-    mov ah, 02h            
-    mov bh, 0
-    add dh, 1
-    mov dl, 0
-    int 10h
+
+    mov al, 13
+    call print_char
+
+    mov al, 10
+    call print_char
+
     ret
 
 newline:
@@ -208,6 +210,7 @@ print_str:
     jmp print_str
 
     .done:
+        call cursor
         ret
 
 print_array:
@@ -392,7 +395,6 @@ get_array:
 
     mov si, str2
     call print_str
-    call jmp_line
 
     mov si, v
     mov cl, [n]
@@ -470,6 +472,7 @@ homescreen_fn:
     
     mov si, mensagemi
     call print_str
+    ;call cursor
 
     mov ax, test_fn
     mov [state], ax
@@ -477,6 +480,15 @@ homescreen_fn:
     call getc
     call clear_screen
     
+    ret
+
+cursor:
+    mov bh, 0
+    mov cx, 1
+    mov al, '_'
+    mov ah, 0ah
+    int 10h
+
     ret
 
 start:
