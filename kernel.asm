@@ -16,8 +16,8 @@ data:
 
     ; array com o comando para cada char
     
-    ;      a            b   c   c ...
-    ctable dw about_fn, sort_fn, ef, ef, ef, ef, ef, ef, ef, ef, ef, ls_fn, maze_fn, ef, ef, ef, ef, ef, ef, ef, ef, ef, ef, ef, ef, ef
+    ;      a            b        c   d ...
+    ctable dw about_fn, sort_fn, ef, ef, ef, ef, ef, ef, ef, ef, ef, ls_fn, maze_fn, ef, ef, ef, ef, ef, screensaver, ef, ef, ef, ef, ef, ef, ef
 
     v TIMES 100 db 0
     n db 0
@@ -77,6 +77,7 @@ _put_pixel: ; (x, y, color)
 %endmacro
 
 _draw_horizontal_line: ; (y, x1, x2, color)
+
     mov bp, sp 
 
     mov ax, [bp+2]  ; y
@@ -93,12 +94,13 @@ _draw_horizontal_line: ; (y, x1, x2, color)
     ret
 
 %macro draw_horizontal_line 4
-    push ax
-    push bx
-    push cx
-    push dx
-    push bp
-    push es
+    ; push ax
+    ; push bx
+    ; push cx
+    ; push dx
+    ; push bp
+    ; push es
+    pusha
 
     push %4
     push %3
@@ -108,12 +110,49 @@ _draw_horizontal_line: ; (y, x1, x2, color)
     call _draw_horizontal_line
 
     add sp, 8
-    pop es
-    pop bp
-    pop dx
-    pop cx
-    pop bx    
-    pop ax
+    popa
+    ; pop es
+    ; pop bp
+    ; pop dx
+    ; pop cx
+    ; pop bx    
+    ; pop ax
+%endmacro
+
+_draw_square:       ;(x, y, color)
+    mov bp, sp
+
+    ;arguments
+    mov ax, [bp+2]      ; x position       
+    mov si, 50          ; width
+    add si, ax
+    mov bx, [bp+4]      ; y position 
+    mov dx, [bp+6]      ; color
+    mov cx, 0           ; counter
+
+    .square_loop:
+    draw_horizontal_line bx, ax, si, dx 
+
+    inc bx          ; increase y
+    ; inc ax
+    ; inc si
+    inc cx          ; increase coutner
+
+    cmp cx, 50        ; compare counter with square width 
+    jl .square_loop
+
+    ret
+
+%macro draw_square 3
+    pusha
+
+    push %3
+    push %2
+    push %1
+    call _draw_square
+
+    add sp, 6
+    popa
 %endmacro
 
 _delay:
@@ -592,6 +631,125 @@ maze_fn:
 
     ret
 
+
+
+
+screensaver:
+    pusha
+    call clear_screen
+
+    mov ax, 1           ; x position
+    mov bx, 1           ; y position
+    mov cx, 1           ; color
+    mov dx, 0           ; moving state -> 0(right down), 1(right up), 2(left up), 3(left down) 
+
+    .screensaver_animation_loop:    
+    call clear_screen
+    cmp cx, 15
+    jne .scrensaver_continue
+    mov cx, 1
+    .scrensaver_continue:
+    draw_square ax, bx, cx
+
+    ; inertia
+        ; right down inertia
+    cmp dx, 0
+    jne .screensaver_dont_right_down 
+    inc ax              ; increase x
+    inc bx              ; increase y
+    .screensaver_dont_right_down:
+        ; right up inertia
+    cmp dx, 1
+    jne .screensaver_dont_right_up 
+    inc ax              ; increase x
+    dec bx              ; decrease y
+    .screensaver_dont_right_up:
+        ; left up inertia
+    cmp dx, 2 
+    jne .screensaver_dont_left_up 
+    dec ax              ; decrease x
+    dec bx              ; decrease y
+    .screensaver_dont_left_up:
+        ; left down inertia
+    cmp dx, 3
+    jne .screensaver_dont_left_down 
+    dec ax              ; decrease x
+    inc bx              ; increase y
+    .screensaver_dont_left_down:
+
+    ; velocity vector change
+        ; if hits bottom 
+    cmp bx, (199-50)
+    jne .screensaver_dont_go_up
+    inc cx  ; increase color
+            ; if moving state is right down, change to right up
+    cmp dx, 0
+    jne .screensaver_change_left_up
+    mov dx, 1
+    jmp .screensaver_end_func
+            ; if moving state is left down, change to left up
+    .screensaver_change_left_up:
+    mov dx, 2
+    jmp .screensaver_end_func
+    .screensaver_dont_go_up:
+
+        ; if hits up
+    cmp bx, 0
+    jne .screensaver_dont_go_down
+    inc cx  ; increase color
+            ; if moving state is left up, change to left down
+    cmp dx, 2
+    jne .screensaver_change_left_down
+    mov dx, 3
+    jmp .screensaver_end_func
+            ; if moving state is right up, change to right down
+    .screensaver_change_left_down:
+    mov dx, 0
+    jmp .screensaver_end_func
+    .screensaver_dont_go_down:
+
+        ; if hits right 
+    cmp ax, (319-50)
+    jne .screensaver_dont_go_left
+    inc cx  ; increase color
+            ; if moving state is up right 
+    cmp dx, 1
+    jne .screensaver_change_left_down_2
+    mov dx, 2
+    jmp .screensaver_end_func
+            ;if moving state is down right
+    .screensaver_change_left_down_2:
+    mov dx, 3
+    jmp .screensaver_end_func
+    .screensaver_dont_go_left:
+
+        ; if hits left
+    cmp ax, 0
+    jne .screensaver_dont_go_right
+    inc cx  ; increase color
+            ; if moving state is left down
+    cmp dx, 3
+    jne .screensaver_change_right_up
+    mov dx, 0
+    jmp .screensaver_end_func
+            ; if moving state is up left
+    .screensaver_change_right_up:
+    mov dx, 1
+    jmp .screensaver_end_func
+    .screensaver_dont_go_right:
+
+
+    .screensaver_end_func:
+    DELAY 0, 10000000
+
+    jmp .screensaver_animation_loop 
+
+    call clear_screen
+
+    popa
+
+    call exit_to_shell
+    ret
 start:
     xor ax, ax
     mov ds, ax

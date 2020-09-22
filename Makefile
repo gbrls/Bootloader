@@ -43,7 +43,8 @@ write_kernel:
 
 launch_qemu:
 	clear
-	@qemu-system-i386 $(qemu_flags) $(boot_disk)
+	#@qemu-system-i386 $(qemu_flags) $(boot_disk)
+	@qemu-system-i386 -enable-kvm $(qemu_flags) $(boot_disk)
 
 clean:
 	@rm -f *.bin $(boot_disk) *~
