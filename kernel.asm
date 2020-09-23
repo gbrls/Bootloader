@@ -14,7 +14,7 @@ data:
     about_msg db 'Esse sistema foi desenvolvido por ...',13,10,0
     sprompt db 'MY-PC>',0
 
-    arg db 64 DUP(0)
+    arg TIMES 64 db 0
 
     cowCmd db 'Digite uma mensagem para a vaca exibir:',13,10,0
     
