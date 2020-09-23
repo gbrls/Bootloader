@@ -703,6 +703,8 @@ shell_fn:
     stosb
     mov al, 10
     stosb
+    mov al, 0
+    stosb
 
     .end:
     ret
