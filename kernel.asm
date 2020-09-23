@@ -676,7 +676,7 @@ shell_fn:
 
         stosb
 
-    .notsavearg
+    .notsavearg:
 
         cmp al, 13
     jne .input
