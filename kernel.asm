@@ -94,12 +94,6 @@ _draw_horizontal_line: ; (y, x1, x2, color)
     ret
 
 %macro draw_horizontal_line 4
-    ; push ax
-    ; push bx
-    ; push cx
-    ; push dx
-    ; push bp
-    ; push es
     pusha
 
     push %4
@@ -111,47 +105,41 @@ _draw_horizontal_line: ; (y, x1, x2, color)
 
     add sp, 8
     popa
-    ; pop es
-    ; pop bp
-    ; pop dx
-    ; pop cx
-    ; pop bx    
-    ; pop ax
 %endmacro
 
-_draw_square:       ;(x, y, color)
+_draw_square:       ;(x, y, width, color)
     mov bp, sp
 
     ;arguments
     mov ax, [bp+2]      ; x position       
-    mov si, 50          ; width
-    add si, ax
     mov bx, [bp+4]      ; y position 
-    mov dx, [bp+6]      ; color
+    mov si, [bp+6]          ; width
+    add si, ax
+    mov dx, [bp+8]      ; color
     mov cx, 0           ; counter
 
     .square_loop:
+    
     draw_horizontal_line bx, ax, si, dx 
 
     inc bx          ; increase y
-    ; inc ax
-    ; inc si
     inc cx          ; increase coutner
 
-    cmp cx, 50        ; compare counter with square width 
+    cmp cx, [bp+6]       ; compare counter with square width 
     jl .square_loop
 
     ret
 
-%macro draw_square 3
+%macro draw_square 4
     pusha
 
+    push %4
     push %3
     push %2
     push %1
     call _draw_square
 
-    add sp, 6
+    add sp, 8
     popa
 %endmacro
 
@@ -732,6 +720,7 @@ screensaver:
     mov bx, 1           ; y position
     mov cx, 1           ; color
     mov dx, 0           ; moving state -> 0(right down), 1(right up), 2(left up), 3(left down) 
+    
 
     .screensaver_animation_loop:    
     pusha
@@ -746,14 +735,22 @@ screensaver:
     call exit_to_shell
     ret
 
+
     .screensaver_dont_exit:
     popa
+
+    push 100            ; width <---------
+    mov bp, sp
+
     call clear_screen
     cmp cx, 15
     jne .scrensaver_continue
     mov cx, 1
     .scrensaver_continue:
-    draw_square ax, bx, cx
+    push dx
+    mov dx, [bp]
+    draw_square ax, bx, dx, cx
+    pop dx
 
     ; inertia
         ; right down inertia
@@ -783,7 +780,18 @@ screensaver:
 
     ; velocity vector change
         ; if hits bottom 
-    cmp bx, (199-50)
+    push ax
+    push dx
+    push bp
+    mov ax, [bp]
+    mov dx, 199
+    sub dx, ax
+    ; cmp bx, (199-50)
+    cmp bx, dx 
+    pop bp
+    pop dx
+    pop ax
+
     jne .screensaver_dont_go_up
     inc cx  ; increase color
             ; if moving state is right down, change to right up
@@ -813,7 +821,17 @@ screensaver:
     .screensaver_dont_go_down:
 
         ; if hits right 
-    cmp ax, (319-50)
+    push bx
+    push dx
+    push bp
+    mov bx, [bp]
+    mov dx, 319
+    sub dx, bx
+    cmp ax, dx
+    pop bp
+    pop dx
+    pop bx
+
     jne .screensaver_dont_go_left
     inc cx  ; increase color
             ; if moving state is up right 
@@ -843,7 +861,9 @@ screensaver:
     .screensaver_dont_go_right:
 
     .screensaver_end_func:
-    DELAY 0, 10000000
+    add sp, 2
+    ; DELAY 0, 10000000
+    DELAY 0, 1000
 
     jmp .screensaver_animation_loop 
 
