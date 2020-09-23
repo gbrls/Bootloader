@@ -6,7 +6,7 @@ data:
     str1 db 'Digite o tamanho do vetor: ', 13, 10, 0
     str2 db 'Digite o vetor: ',13,10,0
     str_test db 'Pressione qualquer tecla', 13, 10, 0
-    comandos db 'ls - Lista os comandos disponiveis.',13,10,'bubble - Veja o bubble sort em acao.',13,10,'selection - Veja o selection em acao.',13,10,'about - Informacoes sobre o sistema.',13,10,'maze - Gere um quase labirinto',13,10,'quadrado - Screensaver com um quadrado',13,10,0
+    comandos db 'ls - Lista os comandos disponiveis.',13,10,'bubble - Veja o bubble sort em acao.',13,10,'selection - Veja o selection em acao.',13,10,'about - Informacoes sobre o sistema.',13,10,'maze - Gere um quase labirinto',13,10,'quadrado - Screensaver com um quadrado',13,10,'clear - Limpar a tela',13,10,0
 
     mensagemi db 'Sistema operacional X - Ver 0.0.1',13,10,'Empresa de software Ltda. (1984)',13,10,0
 
@@ -17,7 +17,7 @@ data:
     ; array com o comando para cada char
     
     ;      a            b        c   d ...
-    ctable dw about_fn, sort_fn, ef, ef, ef, ef, ef, ef, ef, ef, ef, ls_fn, maze_fn, ef, ef, ef, screensaver, ef, s_sort, ef, ef, ef, ef, ef, ef, ef
+    ctable dw about_fn, sort_fn, clear, ef, ef, ef, ef, ef, ef, ef, ef, ls_fn, maze_fn, ef, ef, ef, screensaver, ef, s_sort, ef, ef, ef, ef, ef, ef, ef
 
     v TIMES 100 db 0
     n db 0
@@ -655,6 +655,8 @@ shell_fn:
 
         mov dl, al
     .notsave:
+        mov bl, 15
+        mov [cor], bl
         call putc
 
         cmp al, 13
@@ -853,6 +855,12 @@ screensaver:
 
     call exit_to_shell
     ret
+
+clear:
+    call clear_screen
+    call exit_to_shell
+    ret
+
 start:
     xor ax, ax
     mov ds, ax
