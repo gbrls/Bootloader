@@ -6,18 +6,19 @@ data:
     str1 db 'Digite o tamanho do vetor: ', 13, 10, 0
     str2 db 'Digite o vetor: ',13,10,0
     str_test db 'Pressione qualquer tecla', 13, 10, 0
-    comandos db 'ls - Lista os comandos disponiveis.',13,10,'bubble - Veja o bubble sort em acao.',13,10,'selection - Veja o selection em acao.',13,10,'about - Informacoes sobre o sistema.',13,10,'maze - Gere um quase labirinto',13,10,'quadrado - Screensaver com um quadrado',13,10,'clear - Limpar a tela',13,10,0
+    comandos db 'ls - Lista os comandos disponiveis.',13,10,'bubble - Veja o bubble sort em acao.',13,10,'selection - Veja o selection em acao.',13,10,'about - Informacoes sobre o sistema.',13,10,'maze - Gere um quase labirinto',13,10,'quadrado - Screensaver com um quadrado',13,10,'clear - Limpar a tela',13,10,'echo - Printa os argumentos',13,10,0
 
-    mensagemi db 'Sistema operacional X - Ver 0.0.1',13,10,'Empresa de software Ltda. (1984)',13,10,0
+    mensagemi db 'CInstema operacional X - Ver 0.1',13,10,'Empresa de software Ltda. (1984)',13,10,0
 
     erro_msg db 'Comando nao reconhecido (o_o)',13,10,0
     about_msg db 'Esse sistema foi desenvolvido por ...',13,10,0
     sprompt db 'MY-PC>',0
 
+    arg db 64 DUP(0)
     ; array com o comando para cada char
     
     ;      a            b        c   d ...
-    ctable dw about_fn, sort_fn, clear, ef, ef, ef, ef, ef, ef, ef, ef, ls_fn, maze_fn, ef, ef, ef, screensaver, ef, s_sort, ef, ef, ef, ef, ef, ef, ef
+    ctable dw about_fn, sort_fn, clear, ef, echo, ef, ef, ef, ef, ef, ef, ls_fn, maze_fn, ef, ef, ef, screensaver, ef, s_sort, ef, ef, ef, ef, ef, ef, ef
 
     v TIMES 100 db 0
     n db 0
@@ -223,9 +224,10 @@ endl:
     ret
 
 ; printa uma string  terminada com '0'
-print_str:
 
-    DELAY 0, 0x4000
+print_str_color:
+
+    DELAY 0, 0x4000 ; fiquei sem paciencia
     
     lodsb
 
@@ -233,14 +235,19 @@ print_str:
     je .done
 
     mov ah,0xe
-    mov bl, 10
     int 10h
 
-    jmp print_str
+    jmp print_str_color
 
     .done:
         call cursor
         ret
+print_str:
+
+    mov bl, 56
+    call print_str_color
+
+    ret
 
 print_array:
     pusha
@@ -478,7 +485,7 @@ getValue:
     
     call print_char
 
-    cmp al, 13 ; Pressionou espaço?
+    cmp al, 13 ; Pressionou enter?
     je .end
 
     sub al, '0'
@@ -631,9 +638,11 @@ about_fn:
 ; programa de shell
 shell_fn:
     mov si, sprompt
-    call print_str
+    mov bl, 14
+    call print_str_color
 
     xor dl, dl
+    mov di, 0
 
     .input:
         call getc
@@ -646,6 +655,28 @@ shell_fn:
         mov bl, 15
         mov [cor], bl
         call putc
+
+        cmp al, 13
+        je .notsavearg
+
+        cmp al, 32
+        jne .notspace
+
+        cmp di, 0
+        jne .notspace
+
+        mov di, arg
+        jmp .notsavearg
+
+
+    .notspace:
+
+        cmp di, 0
+        je .notsavearg
+
+        stosb
+
+    .notsavearg
 
         cmp al, 13
     jne .input
@@ -665,6 +696,15 @@ shell_fn:
     mov bx, [eax]
     mov [state], bx
 
+    cmp di, 0
+    je .end
+
+    mov al, 13
+    stosb
+    mov al, 10
+    stosb
+
+    .end:
     ret
 
 exit_to_shell:
@@ -709,9 +749,6 @@ maze_fn:
     call exit_to_shell
 
     ret
-
-
-
 
 screensaver:
     pusha
@@ -879,6 +916,13 @@ screensaver:
 clear:
     call clear_screen
     call exit_to_shell
+    ret
+
+echo:
+    mov si, arg
+    call print_str
+    call exit_to_shell
+
     ret
 
 start:
