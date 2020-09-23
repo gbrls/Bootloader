@@ -6,7 +6,7 @@ data:
     str1 db 'Digite o tamanho do vetor: ', 13, 10, 0
     str2 db 'Digite o vetor: ',13,10,0
     str_test db 'Pressione qualquer tecla', 13, 10, 0
-    comandos db 'ls - Lista os comandos disponiveis.',13,10,'bubble - Veja o bubble sort em acao.',13,10,'selection - Veja o selection em acao.',13,10,'about - Informacoes sobre o sistema.',13,10,'maze - Gere um quase labirinto',13,10,'quadrado - Screensaver com um quadrado',13,10,'clear - Limpar a tela',13,10,'echo - Printa os argumentos',13,10,0
+    comandos db 'ls - Lista os comandos disponiveis.',13,10,'bubble - Veja o bubble sort em acao.',13,10,'selection - Veja o selection em acao.',13,10,'about - Informacoes sobre o sistema.',13,10,'maze - Gere um quase labirinto',13,10,'quadrado - Screensaver com um quadrado',13,10,'vaquinha - Uma vaca reproduzindo uma mensagem.',13,10,'inverter - Exibi uma mensagem ao contrario.',13,10,'clear - Limpar a tela',13,10,'echo - Printa os argumentos',13,10,0
 
     mensagemi db 'CInstema operacional X - Ver 0.1',13,10,'Empresa de software Ltda. (1984)',13,10,0
 
@@ -15,10 +15,25 @@ data:
     sprompt db 'MY-PC>',0
 
     arg db 64 DUP(0)
+
+    cowCmd db 'Digite uma mensagem para a vaca exibir:',13,10,0
+    
+    blkS db '                             ',13,10,0
+    cow1 db '        \   ^__^             ',13,10,0
+    cow2 db '         \  (oo)\_______     ',13,10,0
+    cow3 db '            (__)\       )\/\ ',13,10,0
+    cow4 db '                ||----w |    ',13,10,0
+    cow5 db '                ||     ||    ',13,10,0
+
+    reverseCmd db 'Digite uma mensagem para ser exibida ao contrario:',13,10,0
+    reverseMsg db '',13,10,0
+
+    msg_max_len    equ 40
+    msg:   resb    msg_max_len+1
     ; array com o comando para cada char
     
     ;      a            b        c   d ...
-    ctable dw about_fn, sort_fn, clear, ef, echo, ef, ef, ef, ef, ef, ef, ls_fn, maze_fn, ef, ef, ef, screensaver, ef, s_sort, ef, ef, ef, ef, ef, ef, ef
+    ctable dw about_fn, sort_fn, clear, ef, echo, ef, ef, ef, reverse_fn, ef, ef, ls_fn, maze_fn, ef, ef, ef, screensaver, ef, s_sort, ef, ef, cow_fn, ef, ef, ef, ef
 
     v TIMES 100 db 0
     n db 0
@@ -469,6 +484,53 @@ get_n:
     .end:
         call endl
         ret
+
+get_string:
+    mov di, msg
+    lea si, [di+msg_max_len]
+    .for:
+        cmp di, si
+        jae .fim
+        call getc
+        call print_char 
+        cmp al, 13
+        je .fim
+        
+        mov [di], al
+        inc di
+        jmp .for
+    .fim:
+        mov [di], byte 0
+        ret
+
+get_reverseString:
+    mov si, msg
+    mov di, reverseMsg
+
+	mov cl,0
+	.for:
+		lodsb
+		cmp al, 0
+		je .end
+
+		push ax 
+		inc cl
+		jmp .for
+
+	.end:
+	.for1:
+		cmp cl,0
+		je .end1
+		dec cl
+		pop ax
+		stosb
+		jmp .for1
+	.end1:
+
+    mov al,0
+    stosb
+
+	ret
 
 getValue:
 
@@ -923,6 +985,69 @@ clear:
 echo:
     mov si, arg
     call print_str
+    call exit_to_shell
+
+    ret
+
+cow_fn:
+    mov si, cowCmd
+    call print_str
+
+    call get_string
+    call endl
+    call endl
+
+    mov al, '<'
+    call putc
+    mov si, msg
+    call print_str
+    mov al, '>'
+    call putc
+
+    mov si, blkS
+    call print_str
+
+    mov si, cow1
+    call print_str
+    mov si, cow2
+    call print_str
+    mov si, cow3
+    call print_str
+    mov si, cow4
+    call print_str
+    mov si, cow5
+    call print_str
+
+    call exit_to_shell
+
+    ret
+
+reverse_fn:
+    mov si, reverseCmd
+    call print_str
+
+    call get_string
+    call get_reverseString
+    call endl   
+    call endl 
+
+    mov al, '-'
+    call putc
+    mov al, '>'
+    call putc
+    mov al, ' '
+    call putc
+    mov si, reverseMsg
+    call print_str
+    mov al, ' '
+    call putc
+    mov al, '<'
+    call putc
+    mov al, '-'
+    call putc
+
+    call endl
+
     call exit_to_shell
 
     ret
