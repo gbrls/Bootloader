@@ -725,6 +725,7 @@ maze_fn:
 
 screensaver:
     pusha
+    
     call clear_screen
 
     mov ax, 1           ; x position
@@ -733,6 +734,20 @@ screensaver:
     mov dx, 0           ; moving state -> 0(right down), 1(right up), 2(left up), 3(left down) 
 
     .screensaver_animation_loop:    
+    pusha
+    mov ah, 01h
+    int 16h
+    jz .screensaver_dont_exit
+    popa
+    popa
+    mov ah, 00h
+    int 16h
+    call clear_screen
+    call exit_to_shell
+    ret
+
+    .screensaver_dont_exit:
+    popa
     call clear_screen
     cmp cx, 15
     jne .scrensaver_continue
@@ -826,7 +841,6 @@ screensaver:
     mov dx, 1
     jmp .screensaver_end_func
     .screensaver_dont_go_right:
-
 
     .screensaver_end_func:
     DELAY 0, 10000000
