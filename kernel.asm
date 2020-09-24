@@ -9,7 +9,7 @@ data:
     str_test db 'Pressione qualquer tecla', 13, 10, 0
     comandos db 'ls - Lista os comandos disponiveis.',13,10,'bubble - Veja o bubble sort em acao.',13,10,'selection - Veja o selection em acao.',13,10,'about - Informacoes sobre o sistema.',13,10,'maze - Gere um quase labirinto',13,10,'quadrado - Screensaver com um quadrado',13,10,'vaquinha - Uma vaca reproduzindo uma mensagem.',13,10,'inverter - Exibe uma mensagem ao contrario.',13,10,'clear - Limpar a tela',13,10,'echo - Printa os argumentos',13,10,0
 
-    mensagemi db 'CInstema operacional X - Ver 0.1',13,10,'Empresa de software Ltda. (1984)',13,10,0
+    mensagemi db 'CInstema operacional X - Ver 0.1',13,10,'Empresa de software Ltda. (1984)',13,10,13,10,'Digite ls para ajuda.',13,10,0
 
     erro_msg db 'Comando nao reconhecido (o_o)',13,10,0
     about_msg db 'Esse sistema foi desenvolvido por ...',13,10,0
@@ -763,10 +763,10 @@ shell_fn:
     cmp di, 0
     je .end
 
-    mov al, 13
-    stosb
-    mov al, 10
-    stosb
+    ;mov al, 13
+    ;stosb
+    ;mov al, 10
+    ;stosb
     mov al, 0
     stosb
 
@@ -986,7 +986,14 @@ clear:
 
 echo:
     mov si, arg
+    mov al, '<'
+    call putc
     call print_str
+    mov al, '>'
+    call putc
+    mov al, 32
+    call putc
+    call endl
     call exit_to_shell
 
     ret
