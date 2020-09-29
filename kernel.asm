@@ -506,7 +506,8 @@ get_string:
         ret
 
 get_reverseString:
-    mov si, msg
+    ;mov si, msg
+    mov si, arg
     mov di, reverseMsg
 
 	mov cl,0
@@ -999,16 +1000,16 @@ echo:
     ret
 
 cow_fn:
-    mov si, cowCmd
-    call print_str
+    ;mov si, cowCmd
+    ;call print_str
 
-    call get_string
-    call endl
-    call endl
+    ;call get_string
+    ;call endl
+    ;call endl
 
     mov al, '<'
     call putc
-    mov si, msg
+    mov si, arg
     call print_str
     mov al, '>'
     call putc
@@ -1032,13 +1033,13 @@ cow_fn:
     ret
 
 reverse_fn:
-    mov si, reverseCmd
-    call print_str
+    ;mov si, reverseCmd
+    ;call print_str
 
-    call get_string
+    ;call get_string
     call get_reverseString
-    call endl   
-    call endl 
+    ;call endl   
+    ;call endl 
 
     mov al, '-'
     call putc
