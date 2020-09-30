@@ -12,7 +12,7 @@ data:
     mensagemi db 'CInstema operacional X - Ver 0.1',13,10,'Empresa de software Ltda. (1984)',13,10,13,10,'Digite ls para ajuda.',13,10,0
 
     erro_msg db 'Comando nao reconhecido (o_o)',13,10,0
-    about_msg db 'Esse sistema foi desenvolvido por ...',13,10,0
+    about_msg db 'Este sistema foi desenvolvido por alie- ligenas do passado.',13,10,0
     sprompt db 'MY-PC>',0
 
     arg TIMES 64 db 0
@@ -496,7 +496,8 @@ get_string:
         ret
 
 get_reverseString:
-    mov si, msg
+    ;mov si, msg
+    mov si, arg
     mov di, reverseMsg
 
 	mov cl,0
@@ -990,16 +991,16 @@ echo:
     ret
 
 cow_fn:
-    mov si, cowCmd
-    call print_str
+    ;mov si, cowCmd
+    ;call print_str
 
-    call get_string
-    call endl
-    call endl
+    ;call get_string
+    ;call endl
+    ;call endl
 
     mov al, '<'
     call putc
-    mov si, msg
+    mov si, arg
     call print_str
     mov al, '>'
     call putc
@@ -1023,13 +1024,13 @@ cow_fn:
     ret
 
 reverse_fn:
-    mov si, reverseCmd
-    call print_str
+    ;mov si, reverseCmd
+    ;call print_str
 
-    call get_string
+    ;call get_string
     call get_reverseString
-    call endl   
-    call endl 
+    ;call endl   
+    ;call endl 
 
     mov al, '-'
     call putc
