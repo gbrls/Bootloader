@@ -48,7 +48,7 @@ data:
 init_video:
     mov ah, 00h ;escolhe modo video
     mov al, 13h ;modo VGA
-    int 10h
+    int 10h     ;chama interrupt
 
     ret
 
@@ -56,27 +56,22 @@ _put_pixel: ; (x, y, color)
 
     mov bp, sp          ; we can't index the sp, so we use bp
 
-    mov ax, 0a000h      
+    mov ax, 0a000h      ; VGA VIDEO RAM segment adress
     mov es, ax          ; set the es with the VGA VIDEO RAM segment adress.
   
-    mov ax, [bp+2]         ; y position
+    mov ax, [bp+2]      ; get y position from stack
     mov cx, 320         ; width in pixels of the screen
     mul cx              ; update ax (and dx?) with the result
-    add ax, [bp+4]         ; add x position to result   
+    add ax, [bp+4]      ; add x position to result   
     
-    mov bx, ax
-    mov al, [bp+6]
-    es mov [bx], al 
+    mov bx, ax          ; mov x position from ax to bx (al is needed below)
+    mov al, [bp+6]      ; get color from stack
+    es mov [bx], al     ; TODO: explain     
 
     ret
 
 %macro put_pixel 3
-    push ax
-    push bx
-    push cx
-    push dx
-    push bp
-    push es
+    pusha
 
     push %3
     push %1
@@ -85,17 +80,12 @@ _put_pixel: ; (x, y, color)
     call _put_pixel
 
     add sp, 6
-    pop es
-    pop bp
-    pop dx
-    pop cx
-    pop bx    
-    pop ax
+    popa
 %endmacro
 
 _draw_horizontal_line: ; (y, x1, x2, color)
 
-    mov bp, sp 
+    mov bp, sp      ; we can't index the sp, so we use bp
 
     mov ax, [bp+2]  ; y
     mov bx, [bp+4]  ; x1
@@ -104,8 +94,8 @@ _draw_horizontal_line: ; (y, x1, x2, color)
 
     .draw_horizontal_line_loop:
     put_pixel bx, ax, dx
-    add bx, 1
-    cmp bx, cx
+    inc bx          ; increases the pixel's x position
+    cmp bx, cx      ; until it reaches x2
     jl .draw_horizontal_line_loop
 
     ret
@@ -127,20 +117,20 @@ _draw_horizontal_line: ; (y, x1, x2, color)
 _draw_square:       ;(x, y, width, color)
     mov bp, sp
 
-    ;arguments
+    ;get parameters from stack
     mov ax, [bp+2]      ; x position       
     mov bx, [bp+4]      ; y position 
-    mov si, [bp+6]          ; width
-    add si, ax
+    mov si, [bp+6]      ; width
+    add si, ax          ; add x position (left up corner) to the square width
     mov dx, [bp+8]      ; color
-    mov cx, 0           ; counter
+    mov cx, 0           ; counter (will loop until cx == square_width)
 
     .square_loop:
     
     draw_horizontal_line bx, ax, si, dx 
 
-    inc bx          ; increase y
-    inc cx          ; increase coutner
+    inc bx               ; increase y, for the next line (below the one printed now)
+    inc cx               ; increase coutner (to check if width was reached)
 
     cmp cx, [bp+6]       ; compare counter with square width 
     jl .square_loop
@@ -160,13 +150,13 @@ _draw_square:       ;(x, y, width, color)
     popa
 %endmacro
 
-_delay:
-    push ax
+_delay:             ;(interval_in_microsecond_high_word,  interval_in_microsecond_low_word)
+    push ax         ; to preserve ax value before calling this function
+
     ; http://www.techhelpmanual.com/221-int_15h_86h__wait.html
 
-    mov ah, 86h
-
-    int 15h
+    mov ah, 86h     ; interrupt parameter for delay 
+    int 15h         ; interrupt that will wait the given amount of microsseconds (in the macro parameters)
 
     pop ax
     ret
@@ -817,21 +807,22 @@ maze_fn:
     ret
 
 screensaver:
+    ; a screensaver with a square the bounces around changing colors
     pusha
     
     call clear_screen
 
-    mov ax, 1           ; x position
-    mov bx, 1           ; y position
-    mov cx, 1           ; color
+    mov ax, 1           ; x position at start
+    mov bx, 1           ; y position at start
+    mov cx, 1           ; color at start
     mov dx, 0           ; moving state -> 0(right down), 1(right up), 2(left up), 3(left down) 
     
 
-    .screensaver_animation_loop:    
-    pusha
+    .screensaver_animation_loop:    ; main animation loop 
+    pusha                           ; save registers before checking keyboard input 
     mov ah, 01h
     int 16h
-    jz .screensaver_dont_exit
+    jz .screensaver_dont_exit        
     popa
     popa
     mov ah, 00h
@@ -844,7 +835,7 @@ screensaver:
     .screensaver_dont_exit:
     popa
 
-    push 100            ; width <---------
+    push 30            ; width <---------
     mov bp, sp
 
     call clear_screen
@@ -1068,7 +1059,7 @@ hello_there:
     ret
 
 start:
-    xor ax, ax
+    xor ax, ax      ; just cleaning up some registers
     mov ds, ax
     mov es, ax
 
