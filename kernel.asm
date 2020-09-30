@@ -158,7 +158,7 @@ _delay:             ;(interval_in_microsecond_high_word,  interval_in_microsecon
     mov ah, 86h     ; interrupt parameter for delay 
     int 15h         ; interrupt that will wait the given amount of microsseconds (in the macro parameters)
 
-    pop ax
+    pop ax      
     ret
 
 %macro DELAY 2
@@ -809,7 +809,7 @@ maze_fn:
 
 screensaver:
     ; a screensaver with a square the bounces around changing colors
-    pusha
+    pusha               ; save registers before function
     
     call clear_screen
 
@@ -820,38 +820,41 @@ screensaver:
     
 
     .screensaver_animation_loop:    ; main animation loop 
-    pusha                           ; save registers before checking keyboard input 
-    mov ah, 01h
-    int 16h
-    jz .screensaver_dont_exit        
-    popa
-    popa
-    mov ah, 00h
-    int 16h
-    call clear_screen
-    call exit_to_shell
+    push ax                         ; save ax so we can use it as a
+    mov ah, 01h                     ; int 16h parameter (get the state of the keybord buffer: 0 if there's nothing on it, non zero if there's something on it)
+    int 16h                         ; checks if a key was pressed
+    jz .screensaver_dont_exit       ; if no key was pressed, continue program (jump to .screensaver_dont_exit) 
+                                    ; if a key was pressed, popa
+    pop ax                          ; popa the saved registers before keyboad state check
+    mov ah, 00h                     ; int 16h parameter (read key press: this is for clearing the buffer, especially critial if ENTER key was pressed)
+    int 16h                         ; clears the buffer (reads the char on it)
+    popa                            ; popa saved registers for this whole function
+    call clear                      ; clear screen and exit to shell
     ret
 
 
     .screensaver_dont_exit:
-    popa
+    pop ax                            ; popa the saved registers before keyboard state check
 
-    push 30            ; width <---------
-    mov bp, sp
+    push 30                         ; square width
+
+    mov bp, sp                      ; since sp can't be indexed, we use bp instead. bp now points to the square width
 
     call clear_screen
-    cmp cx, 15
-    jne .scrensaver_continue
-    mov cx, 1
+    cmp cx, 16                      ; checks if color value is equal to 16 (were considering the 15 BIOS colors. there is not a 16h color or grater.) 
+    jne .scrensaver_continue        ; if the color value is not equal to 16, keep current color value and continue execution.
+    mov cx, 1                       ; if the color valie is equal to 16, change it to 1 again.
     .scrensaver_continue:
-    push dx
-    mov dx, [bp]
-    draw_square ax, bx, dx, cx
-    pop dx
+    push dx                         ; save dx(moving state) so we can use it as an aux "variable" here.
+    mov dx, [bp]                    ; bp is pointing to the square width
+    draw_square ax, bx, dx, cx      ; draw the square given the parameters
+    pop dx                          ; pop bp to it's original value (which is the moving state)
 
-    ; inertia
+    ; inertia                       ; makes the square move accordingly to its moving state.
+        ; check moving state (on dx) and update x and y accordingly
+
         ; right down inertia
-    cmp dx, 0
+    cmp dx, 0                        
     jne .screensaver_dont_right_down 
     inc ax              ; increase x
     inc bx              ; increase y
@@ -870,26 +873,24 @@ screensaver:
     .screensaver_dont_left_up:
         ; left down inertia
     cmp dx, 3
-    jne .screensaver_dont_left_down 
-    dec ax              ; decrease x
+    jne .screensaver_dont_left_down     ; decrease x
+    dec ax
     inc bx              ; increase y
     .screensaver_dont_left_down:
 
-    ; velocity vector change
-        ; if hits bottom 
-    push ax
+    ; moving state change (if the square touches one of the screen limits, changes the moving state accordingly to its current moving state and to what screen limit whas hit)
+        ; if hits bottom ##################
+    push ax                 ; pushes the registers to be used as aux
     push dx
     push bp
-    mov ax, [bp]
-    mov dx, 199
-    sub dx, ax
-    ; cmp bx, (199-50)
-    cmp bx, dx 
-    pop bp
+    mov ax, [bp]            ; ax = square width
+    mov dx, 199             ; dx = bottom screen limit
+    sub dx, ax              ; dx - width = leftmost upper pixel of the square when it hits the bottom screen limit
+    cmp bx, dx              ; compare the x position of leftmost upper pixel of the square with its position if the square is hitting the bottom screen limit
+    pop bp                  ; recover the registers
     pop dx
     pop ax
-
-    jne .screensaver_dont_go_up
+    jne .screensaver_dont_go_up ; (conditional) if leftmost upper pixel is not where it would be if the square hit the bottom screen limit, don't change mode to go up, jumps to next test 
     inc cx  ; increase color
             ; if moving state is right down, change to right up
     cmp dx, 0
@@ -902,9 +903,9 @@ screensaver:
     jmp .screensaver_end_func
     .screensaver_dont_go_up:
 
-        ; if hits up
-    cmp bx, 0
-    jne .screensaver_dont_go_down
+        ; if hits up #################
+    cmp bx, 0                           ; to check if the square hit the top screen limit is easy, just check if the leftmost (or any horizontal) uppermost pixel is = 0.
+    jne .screensaver_dont_go_down       ; conditional
     inc cx  ; increase color
             ; if moving state is left up, change to left down
     cmp dx, 2
@@ -917,23 +918,22 @@ screensaver:
     jmp .screensaver_end_func
     .screensaver_dont_go_down:
 
-        ; if hits right 
-    push bx
+        ; if hits right ##################
+    push bx                             ; save registers to use as aux
     push dx
     push bp
-    mov bx, [bp]
-    mov dx, 319
-    sub dx, bx
-    cmp ax, dx
-    pop bp
+    mov bx, [bp]                        ; gets square width from stack
+    mov dx, 319                         ; the screen is 320 pixels wide
+    sub dx, bx                          ; subtracts the last horizonal pixel position with de square width
+    cmp ax, dx                          ; compares the square leftmost pixels x position with the last x position possible (for a 320 pixels wide screen)
+    pop bp                              ; restores the registers
     pop dx
     pop bx
-
-    jne .screensaver_dont_go_left
+    jne .screensaver_dont_go_left       ; conditional (if it )
     inc cx  ; increase color
             ; if moving state is up right 
     cmp dx, 1
-    jne .screensaver_change_left_down_2
+    jne .screensaver_change_left_down_2         ; conditional
     mov dx, 2
     jmp .screensaver_end_func
             ;if moving state is down right
@@ -942,9 +942,9 @@ screensaver:
     jmp .screensaver_end_func
     .screensaver_dont_go_left:
 
-        ; if hits left
-    cmp ax, 0
-    jne .screensaver_dont_go_right
+        ; if hits left ##################
+    cmp ax, 0                                                               
+    jne .screensaver_dont_go_right              ; conditional
     inc cx  ; increase color
             ; if moving state is left down
     cmp dx, 3
@@ -957,19 +957,12 @@ screensaver:
     jmp .screensaver_end_func
     .screensaver_dont_go_right:
 
-    .screensaver_end_func:
-    add sp, 2
-    ; DELAY 0, 10000000
-    DELAY 0, 1000
+    .screensaver_end_func:                      ; when all the update has been done,
+    add sp, 2                                   ; cleans square width from stack
+    DELAY 0, 10000                               ; applies a delay of 1000 low-word of a microsecond
 
-    jmp .screensaver_animation_loop 
+    jmp .screensaver_animation_loop             ; jump to next animation frame
 
-    call clear_screen
-
-    popa
-
-    call exit_to_shell
-    ret
 
 clear:
     call clear_screen
