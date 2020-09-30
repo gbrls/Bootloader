@@ -820,7 +820,7 @@ screensaver:
     
 
     .screensaver_animation_loop:    ; main animation loop 
-    push ax                         ; save ax so we can use it as a
+    push ax                         ; save ax so we can use it as aux
     mov ah, 01h                     ; int 16h parameter (get the state of the keybord buffer: 0 if there's nothing on it, non zero if there's something on it)
     int 16h                         ; checks if a key was pressed
     jz .screensaver_dont_exit       ; if no key was pressed, continue program (jump to .screensaver_dont_exit) 
