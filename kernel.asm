@@ -34,7 +34,7 @@ data:
     ; array com o comando para cada char
     
     ;      a            b        c   d ...
-    ctable dw about_fn, sort_fn, clear, ef, echo, ef, ef, hello_there, reverse_fn, ef, ef, ls_fn, maze_fn, ef, ef, ef, screensaver, ef, s_sort, ef, ef, cow_fn, ef, ef, ef, ef
+    ctable dw about_fn, sort_fn, clear, ef, echo, ef, ef, hello_there, reverse_fn, ef, ef, ls_fn, maze_fn, ef, ef, planets_fn, screensaver, ef, s_sort, ef, ef, cow_fn, ef, ef, ef, ef
 
     v TIMES 100 db 0
     n db 0
@@ -996,6 +996,65 @@ echo:
     call endl
     call exit_to_shell
 
+    ret
+
+planets_fn:
+    call clear_screen
+
+    ;mov si, arg
+    ;call print_str
+
+    mov dx, 320
+    .w:
+        mov cx, 200
+        .h:
+
+        push dx
+        push cx
+
+        ;shr cx, 1
+        mov ax, cx
+        mul cl
+
+        mov bx, ax
+
+
+        ;shr dx, 1
+        mov ax, dx
+        mul dl
+        add ax, bx
+        ;mul ax ; ax = dx * dx
+
+        ;add ax, bx ; ax = dx * dx  + bx * bx
+
+        pop cx
+        pop dx
+
+        cmp ax, 1000
+        ja .notprint
+
+        push dx
+        push cx
+
+        put_pixel dx, cx, 0fh
+
+        pop cx
+        pop dx
+
+        .notprint:
+
+
+        dec cx
+        cmp cx, 0
+        jg .h
+
+    dec dx
+    cmp dx, 0
+    jg .w
+
+    call getc
+    call clear_screen
+    call exit_to_shell
     ret
 
 cow_fn:
