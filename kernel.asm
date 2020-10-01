@@ -279,6 +279,7 @@ print_array:
     popa
     ret
 
+; Bubble sort's swap prodecure
 swap:
     pusha
 
@@ -615,6 +616,7 @@ clear_screen:
     popa
     ret
 
+; A wrapper around the sort that was implemented before the shell
 sort_fn:
     mov al, 3
     mov [cor], al
@@ -633,6 +635,7 @@ sort_fn:
 
     ret
 
+; not used
 test_fn:
     mov si, str_test
     call print_str
@@ -675,7 +678,7 @@ ls_fn:
 
     ret
 
-; funcao para msg de erro
+; Procedure to print a error
 ef:
     mov si, erro_msg
     call print_str
@@ -690,13 +693,16 @@ about_fn:
 
     ret
 
-; programa de shell
+; shell procedure
 shell_fn:
+    ; Print prompt
     mov si, sprompt
-    mov bl, 14
+    mov bl, 14 ; yellow
     call print_str_color
 
-    xor dl, dl
+    ; dl is used as an auxiliary varible to store whether a key has been pressed yet.
+    ; We only use the command's first character to call it's procedure.
+    xor dl, dl 
     mov di, 0
 
     .input:
@@ -711,6 +717,7 @@ shell_fn:
         mov [cor], bl
         call putc
 
+        ; Here we have to check some stuff in order to be able to distinguish betweeen the command and the argument
         cmp al, 13
         je .notsavearg
 
@@ -738,14 +745,15 @@ shell_fn:
 
     call endl
 
-    mov al, dl ; a primeira letra ficou guardada em dl
+    mov al, dl ; the first character is stored in dl 
     mov bl, 'a'
 
-    sub al, bl ; pegamos o offset da letra em relacao a 'a'
+    sub al, bl  ; calculating the character's position on the alphabet (kind of)
     mov ah, 0
     mov bx, 2
-    mul bx ; posicao do vetor
+    mul bx ; calculationg it's position in the commands's jump table
 
+    ; this is like a deferred jump because in the main loop we will jump to [state]
     mov bx, ctable
     add ax, bx
     mov bx, [eax]
@@ -754,22 +762,26 @@ shell_fn:
     cmp di, 0
     je .end
 
-    ;mov al, 13
-    ;stosb
-    ;mov al, 10
-    ;stosb
+    ; Appending a '\0' to the argument's string (it works like a C string)
     mov al, 0
     stosb
 
     .end:
     ret
 
+; Simple helper procedure to abstract the default state transition.
+; This is the only requirement that a prodecure have to satisfy in order to be able to be called by the shell.
 exit_to_shell:
     mov ax, shell_fn
     mov [state], ax
 
     ret
 
+; This program is really simple, we just print / or \ randomly.
+; The only problem is how to select a number randomly...
+; I saw some methods on the internet but they required too many variables or operations that'd be hard to implement in assembly
+; So I basically sum some numbers together and shift the result to print / or \ based on the last bit.
+; It isn't any close to a random number generator but it does generate a nice pattern.
 maze_fn:
     call clear_screen
 
@@ -964,11 +976,14 @@ screensaver:
     jmp .screensaver_animation_loop             ; jump to next animation frame
 
 
+; Resets the cursor and video memory
 clear:
     call clear_screen
     call exit_to_shell
     ret
 
+; A small program/procedure to show how to use command line arguments.
+; hint: the string is stored in arg and that's it.
 echo:
     mov si, arg
     mov al, '<'
@@ -1063,13 +1078,16 @@ start:
     ;mov ax, shell_fn
     mov [state], ax
 
-    ; Loop para mudar de estados
-    ; Cada estado precisa ter uma função que modifica o valor de state para
-    ; a label do próximo estado
+    ; Main loop:
+    ; Each procedure stores in [state] which state it is going to transition to, so it works like a deferred jump.
+    ; Why is it like this and not made with regular calls or jumps?
+    ; If it were with direct calls, the stack would grow indefinitely. 
+    ; If it were implemented with direct jumps at the end of each procedure we wouldn't have control over what happens when a procedure exits.
+    ; Also, jumps are scary, if we abstract them in a nice state machine things behave nicely :)
     .loop: 
     
     mov ax, [state]
-    call eax
+    call eax ; using the "program's" label to call it like a normal procedure
 
     jmp .loop
 
