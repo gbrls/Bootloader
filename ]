@@ -36,9 +36,6 @@ data:
     ;      a            b        c   d ...
     ctable dw about_fn, sort_fn, clear, ef, echo, ef, ef, hello_there, reverse_fn, ef, ef, ls_fn, maze_fn, ef, ef, planets_fn, screensaver, ef, s_sort, ef, ef, cow_fn, ef, ef, ef, ef
 
-
-    life_on_mars db 'Is there life on mars?',13,10,0
-
     v TIMES 100 db 0
     n db 0
     i db 0
@@ -60,7 +57,6 @@ _put_pixel: ; (x, y, color)
     mov bp, sp          ; we can't index the sp, so we use bp
 
     mov ax, 0a000h      ; VGA VIDEO RAM segment adress
-    push es
     mov es, ax          ; set the es with the VGA VIDEO RAM segment adress.
   
     mov ax, [bp+2]      ; get y position from stack
@@ -71,7 +67,6 @@ _put_pixel: ; (x, y, color)
     mov bx, ax          ; mov x position from ax to bx (al is needed below)
     mov al, [bp+6]      ; get color from stack
     es mov [bx], al     ; TODO: explain     
-    pop es
 
     ret
 
@@ -707,8 +702,7 @@ shell_fn:
 
     ; dl is used as an auxiliary varible to store whether a key has been pressed yet.
     ; We only use the command's first character to call it's procedure.
-    xor dx, dx 
-    xor ax, ax
+    xor dl, dl 
     mov di, 0
 
     .input:
@@ -1047,10 +1041,17 @@ draw_circle:
         cmp bx, ax
         jl .notprint
 
+        push dx
+        push cx
+
         mov ax, [bp+8]
         put_pixel dx, cx, ax
 
+        pop cx
+        pop dx
+
         .notprint:
+
 
         dec cx
         cmp cx, 0
@@ -1075,7 +1076,7 @@ draw_circle:
     
     call draw_circle
 
-    add sp, 10
+    add sp, 4
     popa
 %endmacro
 
@@ -1086,7 +1087,7 @@ planets_fn:
     PLANET 160, 100, 0eh, 800, 0
 
 
-     Mercury
+    ; Mercury
     PLANET 160, 100, 0fh, 1225, 1150
     PLANET 125, 100, 16h, 10, 0
 
@@ -1102,19 +1103,13 @@ planets_fn:
     PLANET 95, 100, 0fh, 90, 80
     PLANET 86, 100, 1bh, 8, 0
 
+
     ; Mars
     PLANET 160, 100, 0fh, 8100, 8000
     PLANET 70, 100, 28h, 13, 0
     
     call getc
-
-    mov si, life_on_mars
-    mov bl, 28h
-    call print_str_color
-
-    call getc
-
-    ;call clear_screen
+    call clear_screen
     call exit_to_shell
     ret
 
