@@ -488,44 +488,23 @@ get_n:
         call endl
         ret
 
-get_string:
-    mov di, msg
-    lea si, [di+msg_max_len]
-    .for:
-        cmp di, si
-        jae .fim
-        call getc
-        call print_char 
-        cmp al, 13
-        je .fim
-        
-        mov [di], al
-        inc di
-        jmp .for
-    .fim:
-        mov [di], byte 0
-        ret
-
 get_reverseString:
-    ;mov si, msg
     mov si, arg
     mov di, reverseMsg
 
 	mov cl,0
-	.for:
-		lodsb
-		cmp al, 0
-		je .end
-
-		push ax 
-		inc cl
-		jmp .for
-
-	.end:
-	.for1:
-		cmp cl,0
-		je .end1
-		dec cl
+	.for:                ;O primeiro loop pega todos os caracteres da string apontada por SI.
+		lodsb            ;A cada iteração, ele pega o próximo caractere com a função lodsb (que
+		cmp al, 0        ;carrega o caractere apontado por SI e joga em AL, depois disso incrementa SI
+		je .end          ;e coloca esse caractere na pilha. Após acabar todos os caracteres, eles estarão
+		push ax          ;na pilha, agora quando formos remover esses caracteres da pilha, já iremos obter a
+		inc cl           ;string invertida. O segundo loop está aqui exatamente por isso, ele pega cada
+		jmp .for         ;caractere do topo da pilha e carrega na posição que DI está apontando, usando a função
+	.end:                ;stosb (coloca o valor de AL na posição que DI aponta e depois incrementa DI).
+	.for1:               ;Para sabermos quantas vezes precisamos tirar o elemento da pilha, usamos o registrador CX, que
+		cmp cl,0         ;é incrementado no primeiro loop e decrementado no segundo, portanto quando CX == 0, signifca
+		je .end1         ;que você deve parar de pegar os valores da pilha, ou seja, já obtemos a nossa string invertida
+		dec cl           ;e ela está salva em reverseMsg, que foi onde DI estava apontando.
 		pop ax
 		stosb
 		jmp .for1
@@ -1124,13 +1103,6 @@ planets_fn:
     ret
 
 cow_fn:
-    ;mov si, cowCmd
-    ;call print_str
-
-    ;call get_string
-    ;call endl
-    ;call endl
-
     mov al, '<'
     call putc
     mov si, arg
@@ -1147,25 +1119,19 @@ cow_fn:
     call print_str
     mov si, cow3
     call print_str
-    mov si, cow4
-    call print_str
-    mov si, cow5
-    call print_str
-
+    mov si, cow4         ;Basicamente essa função exibe o argumento passado pelo usuário na tela no
+    call print_str       ;seguinte formato: "<argumento>" e logo após isso, exibe 5 strings que compõe
+    mov si, cow5         ;a vaca (strings essas que foram declaradas no data do código) utilizando a
+    call print_str       ;função print_str. Logo após isso, a função exit_to_shell é chamada para o continuação
+                         ;do código.
     call exit_to_shell
 
     ret
 
 reverse_fn:
-    ;mov si, reverseCmd
-    ;call print_str
-
-    ;call get_string
     call get_reverseString
-    ;call endl   
-    ;call endl 
-
-    mov al, '-'
+    
+    mov al, '-' 
     call putc
     mov al, '>'
     call putc
@@ -1178,13 +1144,13 @@ reverse_fn:
     mov al, '<'
     call putc
     mov al, '-'
-    call putc
-
-    call endl
-
-    call exit_to_shell
-
-    ret
+    call putc            ;Basicamente a função capta o argumento passado pelo usuário
+                         ;e exibe o argumento ao inverso. Primeiro é impresso na tela os
+    call endl            ;seguintes caracteres: "-> ", após isso pegamos a saída da função get_reverseString
+                         ;(no caso é a string reverseMsg) que basicamente é o argumento passado pelo usuário
+    call exit_to_shell   ;invertido. Após isso imprimimos na tela com a função print_str a string reverseMsg
+                         ;e finalizamos imprimindo na tela os seguintes caracteres: " <-". Após isso uma quebra
+    ret                  ;de linha é feita e a função exit_to_shell é chamada para a continuação do código.
 
 hello_there:
     mov si, str3
