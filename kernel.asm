@@ -185,13 +185,13 @@ getc:
     int 16h
     ret
 
-;TODO: implementar uma função para printar números até 99
+
 print_num:
     pusha
 
     xor ah, ah
     mov bl, 10
-    div bl
+    div bl 
 
     ;al = quociente
     ;ah = resto
@@ -264,13 +264,13 @@ print_str:
 print_array:
     pusha
 
-    mov si, v
-    mov cl, [n]
+    mov si, v ; moves to si the beginning of the array
+    mov cl, [n] ; moves to cl the size of the array
 
     .loop:
-        lodsb
+        lodsb ; loads on ah the element which si is pointing and inc si
 
-        call print_num
+        call print_num 
         mov al, ' '
         call print_char
 
@@ -284,8 +284,8 @@ print_array:
     popa
     ret
 
-; Bubble sort's swap prodecure
-swap:
+; Bubble sort's swap procedure
+swap: 
     pusha
 
     mov al, [si]
@@ -296,32 +296,34 @@ swap:
     popa
     ret
 
-selec_swap:
+selec_swap: ; Selection sort's swap procedure
 
     mov al, [bp]
     mov bl, [di]
     mov [di], al
     mov [bp], bl
 
-    dec di
+    dec di ; di initially points to the end of the array, but after each iteration greatest element is saved there and di decrements 
 
-    
     ret
 
-selection:
+selection: ; selection sort
 
-    mov bh, [n]
-    mov di, v
-    mov ax, [n]
-    dec ax
-    add di, ax
+    mov bh, [n] ; save on bh the size of the array, used on the outer_loop
+    mov di, v ; move to di the beginning of the array
+
+    ;we need a pointer to the end of the array , so we move to ax (n-1) and adds it to di, so that the final position pointed by di is the end of the array
+    mov ax, [n] 
+    dec ax 
+    add di, ax 
 
     .outer_loop:
 
-        mov si, v
-        mov bl, bh
+        mov si, v ; pointer to the beginning of the array
+        mov bl, bh ; inner_loop counter initial value = outer_loop counter
 
-        mov bp, si  
+        mov bp, si ; another pointer to the array which will be used on the swap procedure, bp intially points to the first element of the array and at the 
+                   ; end it will be pointing to the greatest element in the interval
 
 
         .inner_loop:
@@ -331,48 +333,50 @@ selection:
             mov cx, 0Fh
             mov dx, 0
 
-            DELAY 0x2, 0x0
+            DELAY 0x2, 0x0 ; delay to help visualize the algorithm
 
             pop dx
             pop cx
 
             inc bh
-            mov [cor], bh
+            mov [cor], bh ; the value on bh sets the color of the char printed on the screen, by changing it every iteration the array will be printed in another
+                          ; color and by doing so we can more easily show what happens in each step of the algorithm 
             dec bh
 
             call print_array
 
             mov al, [si]
             mov cl, [bp]
-            cmp cl, al
+            cmp cl, al ; compares the greatest value so far with the value on si 
 
-            jg .end_inner_loop
+            jg .end_inner_loop ; if the value on si is not bigger we don't need to swap
 
-            mov bp, si    ;Salva o index onde o maior elemento se encontra
+            mov bp, si    ; otherwise saves on bp the index of the greatest element so far
             
 
 
     .end_inner_loop:
 
-        inc si
+        inc si ; moves to the next element of the array
         dec bl
 
-    cmp bl, 0
-    jg .inner_loop
+    cmp bl, 0 
+    jg .inner_loop ; inner_loop counter > 0
 
-    call selec_swap  
+    ; end of the inner_loop
+    call selec_swap  ; swap the element stored on bp with the element saved on di which in the beginning of the sort points to the end of the array
     dec bh
     cmp bh, 0
-    jg .outer_loop
+    jg .outer_loop 
 
     ret 
 
-s_sort:
+s_sort: ; function used to call the selection_sort
     mov al, 3
     mov [cor], al
 
-    call entradas
-    call selection
+    call entradas ; gets the size of the array and its elements
+    call selection ; calls the sort
 
     mov al, 10
     mov [cor], al
@@ -389,7 +393,7 @@ sort:
     push ebp
     mov ebp, esp
 
-    mov bh, [n]
+    mov bh, [n] ; saves the size of the array on bh, used on the outer_loop
 
     ; Vamos chamar o outer loop n vezes
     ; e dentro deste loop vamos percorrer o array
@@ -398,8 +402,8 @@ sort:
 
     .outer_loop:
 
-    mov si, v
-    mov bl, [n]
+    mov si, v ; pointer to the beginning of the array
+    mov bl, [n] ; saves the size of the array on bl, used on the inner_loop
 
     .inner_loop:
         
@@ -408,35 +412,36 @@ sort:
         mov cx, 0Fh
         mov dx, 0
 
-        DELAY 0x2, 0x0
+        DELAY 0x2, 0x0 ; call a delay to help visualize how the algorithm works
 
         pop dx
         pop cx
 
         inc bh
-        mov [cor], bh
+        mov [cor], bh ; the value on bh sets the color of the char printed on the screen, by changing it every iteration the array will be printed in another
+                      ; color and by doing so we can more easily show what happens in each step of the algorithm 
         dec bh
 
         call print_array
         mov al, [si]
         mov cl, [si+1]
-        cmp al, cl
+        cmp al, cl ; compares v[i] with v[i+1] to check if a swap is needed 
 
-        ; se for menor ou igual, não precisa trocar
+        ; if v[i] is less or equal to v[i+1] we don't need to swap
         jle .end_inner_loop 
 
-        call swap
+        call swap ; call the swap function
     .end_inner_loop:
 
-        inc si
-        dec bl
+        inc si ; next element of the array 
+        dec bl ; 
 
-    cmp bl, 1 ; não comparamos com 0 pq queremos chegar só até n-2
-    jg .inner_loop
+    cmp bl, 1 ; no need to compare to 0 because we're only aiming to get to n-2
+    jg .inner_loop ; if greater than 1 -> next iteration of the inner_loop
 
-    dec bh
+    dec bh ; outer_loop counter --
 
-    cmp bh, 0
+    cmp bh, 0 ; if we reached the end of the array -> bubble sort is finished
     jg .outer_loop
 
     pop ebp
@@ -446,36 +451,36 @@ sort:
 get_n: 
 
     mov si, str1
-    call print_str
+    call print_str ; Enter the size N of the array
 
     xor ah, ah
-    int 16h
+    int 16h  ; gets the first char
 
     call print_char
 
-    sub al, '0'
-    mov [n], al
+    sub al, '0' ; char -> int
+    mov [n], al ; saves it on the variable n
 
     xor ah, ah
-    int 16h
+    int 16h ; gets the second char
     
     call print_char
 
-    cmp al, 13
-    je .end
+    cmp al, 13 ; is it equal to '\n'
+    je .end 
 
-    sub al, '0'
+    sub al, '0' ; char -> int
     mov [aux], al
 
     mov al, [n]
     mov cl, 10
-    mul cl
+    mul cl ; multiplies the first number by 10 
 
-    add al, [aux]
-    mov [n], al
+    add al, [aux] ; adds first*10 + second 
+    mov [n], al ; saves it on N
 
     xor ah, ah
-    int 16h
+    int 16h ; finally gets the '\n'
     
     call print_char
 
@@ -534,32 +539,32 @@ get_reverseString:
 getValue:
 
     xor ah, ah
-    int 16h
+    int 16h ; gets the first char
 
     call print_char
 
-    sub al, '0'
-    mov dl, al
+    sub al, '0' ; char -> int
+    mov dl, al 
 
-    xor ah, ah
+    xor ah, ah ; gets the second char
     int 16h
     
     call print_char
 
-    cmp al, 13 ; Pressionou enter?
-    je .end
+    cmp al, 13 ; is it '\n' or another number?
+    je .end ; == '\n', only 1 digit
 
-    sub al, '0'
+    sub al, '0' ; second digit - char -> int
     mov [aux], al
 
     mov al, dl
     mov bl, 10
-    mul bl
+    mul bl ; multiplies the first digit by 10
 
-    add al, [aux]
+    add al, [aux] ; adds the two numbers and saves it on dl
     mov dl, al
 
-    xor ah, ah
+    xor ah, ah ; finally gets the '\n'
     int 16h
     
     call print_char
@@ -579,28 +584,28 @@ getValue:
 
 get_array:
 
-    mov si, str2
-    call print_str
+    mov si, str2 
+    call print_str ; "Enter the elements of the array: "
 
-    mov si, v
-    mov cl, [n]
+    mov si, v ; mov to si the beginning of the array
+    mov cl, [n] ; mov to cl the size of the array
 
     .loop:
         call cursor
-        call getValue
+        call getValue ; gets each value of the array and saves it on dl
 
-        mov [si], dl
+        mov [si], dl ; puts the value on the array
 
-        inc si
+        inc si ; next position of the array
 
-        dec cl
-        cmp cl, 0
-        jg .loop
+        dec cl ; i--
+        cmp cl, 0 ; if equals to 0 we alredy went through the whole array
+        jg .loop ; if not, get the next element
     ret
 
 entradas:
-    call get_n
-    call get_array
+    call get_n ; gets the size N of the array
+    call get_array ; gets N elements and saves it on the array
     ret
 
 clear_screen: 
