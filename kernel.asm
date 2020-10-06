@@ -7,7 +7,7 @@ data:
     str2 db 'Digite o vetor: ',13,10,0
     str3 db 'General Kenobi',13,10,0
     str_test db 'Pressione qualquer tecla', 13, 10, 0
-    comandos db 'ls - Lista os comandos disponiveis.',13,10,'bubble - Veja o bubble sort em acao.',13,10,'selection - Veja o selection em acao.',13,10,'about - Informacoes sobre o sistema.',13,10,'maze - Gere um quase labirinto',13,10,'quadrado - Screensaver com um quadrado',13,10,'vaquinha - Veja uma vaca falar.',13,10,'inverter - Exibe uma mensagem invertida',13,10,'clear - Limpar a tela',13,10,'echo - Printa os argumentos',13,10,'planetas - Veja os planetas rochosos',13,10,0
+    comandos db 'ls - Lista os comandos disponiveis.',13,10,'bubble - Veja o bubble sort em acao.',13,10,'selection - Veja o selection em acao.',13,10,'about - Informacoes sobre o sistema.',13,10,'maze - Gere um quase labirinto',13,10,'quadrado - Screensaver com um quadrado',13,10,'vaquinha - Veja uma vaca falar.',13,10,'inverter - Exibe uma mensagem invertida',13,10,'clear - Limpar a tela',13,10,'echo - Printa os argumentos',13,10,'planetas - Veja os planetas rochosos',13,10,'fantastic song - a song cover',13,10,0
 
     mensagemi db 'CInstema operacional X - Ver 0.1',13,10,'Empresa de software Ltda. (1984)',13,10,13,10,'Digite ls para ajuda.',13,10,0
 
@@ -34,7 +34,7 @@ data:
     ; array com o comando para cada char
     
     ;      a            b        c   d ...
-    ctable dw about_fn, sort_fn, clear, ef, echo, ef, ef, hello_there, reverse_fn, ef, ef, ls_fn, maze_fn, ef, ef, planets_fn, screensaver, ef, s_sort, ef, ef, cow_fn, ef, ef, ef, ef
+    ctable dw about_fn, sort_fn, clear, ef, echo, fantastic_song, ef, hello_there, reverse_fn, ef, ef, ls_fn, maze_fn, ef, ef, planets_fn, screensaver, ef, s_sort, ef, ef, cow_fn, ef, ef, ef, ef
 
 
     life_on_mars db 'Is there life on mars?',13,10,0
@@ -46,7 +46,145 @@ data:
     aux db 0
     cor db 3
     state dw 1
-	;Dados do projeto...
+
+    song:
+        ; hello world	
+        db 041h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 03ch, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; F4, G4
+        db 043h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh ; G4
+        db 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; x
+        db 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; x
+
+        ; programmed to work and not to feel
+        db 0c8h, 045h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 048h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh ; A5, C5
+        db 045h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 041h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh ; A5, F5
+        db 03eh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 03ch, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; D4, C4
+        db 03eh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 045h, 0ffh, 0ffh, 0feh, 0feh, 043h, 0ffh, 0feh ; D4, A4, G4
+        db 045h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh ; A4
+        db 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; x
+
+        ; not even sure that this is real
+        db 0c9h, 045h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 043h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh ; A5, G4
+        db 041h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 040h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh ; F4, E4
+        db 03eh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 039h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh ; D4, A4
+        db 03ch, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 040h, 0ffh, 0ffh, 0feh, 0f41h, 0ffh, 0ffh, 0feh ; C4, E4
+        db 040h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh ; F4, E4
+        ; db 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; x
+        db 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; x
+
+        ; hello world
+        db 0cah, 045h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 03eh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh ; A5, D4
+        db 041h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh ; F4
+        db 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; x
+        db 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; x
+
+        ; find my voice
+        db 0cbh, 041h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 03ch, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh ; F4, C4
+        db 043h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh ; G4
+        db 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; x
+        ; db 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; x
+
+        ; although it sounds like bits and bytes
+        db 0cch, 045h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 048h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh ; A5, C5
+        db 04ah, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 041h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; D5, F4
+        db 03eh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 03ch, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; D4, C4
+        db 03eh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 045h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; D4, A5
+        db 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; x
+        db 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; x
+
+        ; my circuitry is filled with mites
+        db 0cdh, 045h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 043h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh ; A5, G4
+        db 041h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 040h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh ; F4, E4
+        db 03eh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 043h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh ; D4, G4
+        db 040h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 03ch, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; E4, C4
+        db 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; x
+        db 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; x
+        db 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; x
+
+        ; hello world
+        db 0ceh, 045h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 03eh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh ; A5, D4
+        db 041h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh ; F4
+        db 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; x
+        db 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; x
+        db 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; x
+
+        ; ohh, will i find a love?
+        db 0cfh, 04ah, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh ; D5
+        db 048h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0f46h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; C5, A#5
+        db 045h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 046h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; A5, A$5 
+        db 048h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh ; C5
+        db 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; x
+        db 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; x
+        db 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; x
+
+        ; ohh, or a power plug?
+        db 0d0h, 048h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; C5
+        db 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; x
+        db 046h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 045h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; A#5, A5
+        db 043h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 044h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh ; G4, G#4
+        db 045h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh ; A5
+        db 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; x
+        db 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; x
+        db 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; x
+
+        ; ohh, digitally isolated
+        db 0d1h, 04ah, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; D5
+        db 048h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0f46h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; C5, A#5
+        db 045h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 046h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; A5, A$5 
+        db 048h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh ; C5
+        db 041h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh ; F4
+        db 045h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; A5
+        db 03eh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; D4
+
+        ; oh, creator, please don't leave me waiting
+        db 0d2h, 045h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 043h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; A5, G4
+        db 041h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 043h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; F4, G4
+        db 045h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 048h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; A5, C5
+        db 045h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 045h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; A5, A5
+        db 0d3h, 03eh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; D4
+        db 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh ; D4~
+        db 040h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; E4
+        db 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh ; x
+        db 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh ; x
+        db 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh ; x
+
+        ; notes for reference
+        ; db 036h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; F#3
+        ; db 037h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; G3
+        ; db 038h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; G#3
+        ; db 039h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; A4
+        ; db 03ah, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; A#4
+        ; db 03bh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; B4
+        ; db 03ch, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; C4
+        ; db 03dh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; C#4
+        ; db 03eh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; D4
+        ; db 03fh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; D#4
+        ; db 040h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; E4
+        ; db 041h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; F4
+        ; db 042h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; F#4
+        ; db 043h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; G4
+        ; db 044h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; G#4
+        ; db 045h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; A5
+        ; db 046h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; A#5
+        ; db 047h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; B5
+        ; db 048h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; C5
+        ; db 049h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; C#5
+        ; db 04ah, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; D5
+        ; db 04bh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; D#5
+        ; db 04ch, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; E5
+        ; db 04dh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; F5
+        ; db 04eh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; F#5
+        ; db 04fh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; G5
+        ; db 050h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; G#5
+        ; db 051h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; A6
+        ; db 052h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; A#6
+        ; db 053h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; B6
+        ; db 054h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; C6
+        ; db 055h, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0feh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh, 0ffh ; C#6
+
+	
+    lyrics db 'Hello World',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,13,10,'Programmed to work and not to feel',0,13,13,10,'Not even sure that this is real',0,0,0,0,13,13,10,'Hello World',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,13,13,10,'Find my voice',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,13,13,10,'Although it sounds like b and B',0,0,0,0,13,13,10,'My circuitry is filled with mites',0,0,13,13,10,'Hello World',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,13,13,10,'Ohh, will I find a love?',0,0,0,0,0,0,0,0,0,0,0,13,13,10,'Ohh, or a power plug...',0,0,0,0,0,0,0,0,0,0,0,0,13,13,10,'Ohh, digitally i-so-la-ted',0,0,0,0,0,0,0,0,0,13,13,10,'Ohhhh, creator, plz, dont leave me',0,0,13,10,'Waiting',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,13,10,0
+
+    ;Dados do projeto...
 
 init_video:
     mov ah, 00h ;escolhe modo video
@@ -961,7 +1099,7 @@ screensaver:
 
     .screensaver_end_func:                      ; when all the update has been done,
     add sp, 2                                   ; cleans square width from stack
-    DELAY 0, 10000                               ; applies a delay of 1000 low-word of a microsecond
+    DELAY 0, 10000000                               ; applies a delay of 1000 low-word of a microsecond
 
     jmp .screensaver_animation_loop             ; jump to next animation frame
 
@@ -1098,7 +1236,7 @@ planets_fn:
 
     call getc
 
-    ;call clear_screen
+    call clear_screen
     call exit_to_shell
     ret
 
@@ -1157,6 +1295,290 @@ hello_there:
     call print_str
     call exit_to_shell
     ret
+
+fantastic_song:
+
+    ; This code below is inspired from a code originally made by Leo Ono to be run on DOS machines.
+    ; We studied it, understood, commented and adapted it to our use case.
+    ; Also, we composed the notes arrangement of the current song which is a cover of Louze Zong's "Hello World"
+    ; Original Code:https://github.com/leonardo-ono/Assembly8086MarioMusicOnPCSpeakerTest/blob/master/mario.asm
+
+    ; Original Comment ------------------------------------------------------------
+    ; Playing Super Mario Bros music on the PC speaker Test
+    ; Assembly 8086 - Written by Leonardo Ono (ono.leo@gmail.com)
+    ; 12/06/2018
+    ; Target OS: DOS 
+    ; Executable extension: *.COM
+    ; use: nasm mario.asm -o mario.com -f bin
+    ; End of Original Comment -----------------------------------------------------
+
+    ; Start of our adaptation:
+
+    call clear_screen
+
+    ; prints first verse     
+    mov si, lyrics
+    mov bl, 35h
+    call print_str_color
+
+    play_song:
+        mov si, 0						; sets musical note pointer to 0
+        .next_note:						; play next note.
+
+        .check_for_input:   
+            push ax                         ; save ax so we can use it as aux
+            mov ah, 01h                     ; int 16h parameter (get the state of the keybord buffer: 0 if there's nothing on it, non zero if there's something on it)
+            int 16h                         ; checks if a key was pressed
+            jz .song_dont_exit       ; if no key was pressed, continue program (jump to .screensaver_dont_exit) 
+                                            ; if a key was pressed, popa
+            pop ax                          ; popa the saved registers before keyboad state check
+            mov ah, 00h                     ; int 16h parameter (read key press: this is for clearing the buffer, especially critial if ENTER key was pressed)
+            int 16h                         ; clears the buffer (reads the char on it)
+            jmp .end
+
+            .song_dont_exit:
+            pop ax
+            mov bh, 0					; TODO 
+            mov bl, [song + si]			; bl holds the current musical note
+
+            cmp bl, 255 ; ignore		; if the current note is 255, ignore.
+            jz .ignore
+            cmp bl, 254 ; note off		; if the current note is 254, stops the current playing note. 
+            jz .note_off
+
+            cmp bl, 200  ; verse 2
+            jne .next1
+            pusha
+            mov si, lyrics+35
+            mov bl, 35h
+            call print_str_color
+            popa
+            jmp .ignore
+
+            .next1:
+            cmp bl, 201 ; verse 3
+            jne .next2
+            pusha
+            mov si, lyrics+73
+            mov bl, 35h
+            call print_str_color
+            popa
+            jmp .ignore
+            
+            .next2:
+            cmp bl, 202 ; verse 4
+            jne .next3
+            pusha
+            mov si, lyrics+111
+            mov bl, 35h
+            call print_str_color
+            popa
+            jmp .ignore
+            
+            .next3:
+            cmp bl, 203 ; verse 5
+            jne .next4
+            pusha
+            mov si, lyrics+149
+            mov bl, 35h
+            call print_str_color
+            popa
+            jmp .ignore
+            
+            .next4:
+            cmp bl, 204 ; verse 6
+            jne .next5
+            pusha
+            mov si, lyrics+187
+            mov bl, 35h
+            call print_str_color
+            popa
+            jmp .ignore
+            
+            .next5:
+            cmp bl, 205 ; verse 7
+            jne .next6
+            pusha
+            mov si, lyrics+225
+            mov bl, 35h
+            call print_str_color
+            popa
+            jmp .ignore
+            
+            .next6:
+            cmp bl, 206 ; verse 8
+            jne .next7
+            pusha
+            mov si, lyrics+263
+            mov bl, 35h
+            call print_str_color
+            popa
+            jmp .ignore
+             
+            .next7:
+            cmp bl, 207 ; verse 9
+            jne .next8
+            pusha
+            mov si, lyrics+301
+            mov bl, 35h
+            call print_str_color
+            popa
+            jmp .ignore
+              
+            .next8:
+            cmp bl, 208 ; verse 10
+            jne .next9
+            pusha
+            mov si, lyrics+339
+            mov bl, 35h
+            call print_str_color
+            popa
+            jmp .ignore
+               
+            .next9:
+            cmp bl, 209 ; verse 11
+            jne .next10
+            pusha
+            mov si, lyrics+377
+            mov bl, 35h
+            call print_str_color
+            popa
+            jmp .ignore
+                
+            .next10:
+            cmp bl, 210 ; verse 12
+            jne .next11
+            pusha
+            mov si, lyrics+415
+            mov bl, 35h
+            call print_str_color
+            popa
+            jmp .ignore
+                 
+            .next11:
+            cmp bl, 211 ; verse 13
+            jne .next12
+            pusha
+            mov si, lyrics+453
+            mov bl, 35h
+            call print_str_color
+            popa
+            jmp .ignore
+                  
+            .next12:
+            cmp bl, 212 ; verse 14
+            jne .next13
+            pusha
+            mov si, lyrics+491
+            mov bl, 35h
+            call print_str_color
+            popa
+            jmp .ignore
+                   
+            .next13:
+            cmp bl, 213 ; verse 15
+            jne .play_midi_note
+            pusha
+            mov si, lyrics+529
+            mov bl, 35h
+            call print_str_color
+            popa
+            jmp .ignore
+            
+        .play_midi_note:
+            shl bx, 1					; left shift (bit operation to add a 0 at the end of the byte, since we read a value that contains only 7 bits.)
+            mov ax, [midi_note_to_freq_table + bx]	; ax is holding the midi note value
+            call note_on
+            jmp .ignore
+            
+        .note_off:
+            call note_off				; stops the current note being played.
+        .ignore:						; do nothing and continue.
+        
+        .delay:
+            call get_current_time		; current time is saved in the ax register
+            cmp ax, [last_time] 		; we compare current time value with the time value from the last check.
+            jbe .delay					; if current time is below or equal to last time, jump to delay (wait more)
+                                        ; if current time is greater than last time, continue
+            mov [last_time], ax			; update last time with current time for the next check
+        
+            inc si						; increase note pointer to the next musical note.
+            cmp si, [song_size]			; compare note pointer with song_size, so, all notes played, end function with return
+                                        ; if there are still notes left to be played...
+            jl .next_note				; ... jump to next note.
+        .end:
+            call note_off
+            call clear_screen
+            call exit_to_shell
+            ret
+            
+    ; ax = 1193180 / frequency		
+    note_on:
+        ; change frequency
+        mov dx, ax						; dx hold the ax value (midi note value)
+        mov al, 0b6h					; this is the number the 43h port is waiting to recieve to be activated and to wait for 2 bytes (wich will tell what frequence to play)
+        out 43h, al						; we output the al value to the pcspeaker (sound device) oscillator port (43h is the port where we say what oscillator we want to use). 
+        mov ax, dx						; ax gets the midi note value
+        out 42h, al						; sends the first byte of the frequence to the oscillator frequence port(ax low byte)
+        mov al, ah						; holds the ax high byte in the ax low bite register, so we can send it to the oscillator
+        out 42h, al						; sends the second byte of the frequence to the oscillator frequence port(ax high byte)
+
+        ; starts the sound
+        in al, 61h						; reads the 61h port (to clean it from what it had)	
+        or al, 3h						; sets the last 2 bits are 1 (which means to turn the PCSPEAKER on)
+        out 61h, al						; turns on the PCSPEAKER SPEAKER
+        ret
+            
+    ; stop the sound
+    note_off:
+        in al, 61h						; al is the input and 61h is the port number.
+        and al, 0fch					; sets the al to 0fch (wich means to turn the PCSPEAKER off)
+        out 61h, al			
+        ret
+
+
+
+
+    ; ax = get current time
+    get_current_time:
+            push es				; push register to save so we can use it as an aux register
+            mov ax, 0h			; we use ax as an aux register, becuase we cant move literal direct to es register
+            mov es, ax			; es holds adress 0x0, so we can use it as the segment when we write: SEGMENT:OFFSET to get the BIOS counter adress. 
+            mov ax, [es:46ch]	; this adress (46ch or 0x46c) cotains a a 4-byte counter maintained and updated by the BIOS. it's incremented 18.2 times per second.
+                                ; ax is now holding the current time.
+            pop es				; pop saved register  
+            ret
+
+    section .data
+
+    last_time dd 0
+
+    midi_note_to_freq_table:
+            db 014h, 03ah, 015h, 01ah, 0e2h, 0fbh, 060h, 0dfh, 079h, 0c4h, 013h, 0abh, 01bh, 093h, 07bh, 07ch 
+            db 020h, 067h, 0f8h, 052h, 0f2h, 03fh, 0fdh, 02dh, 00ah, 01dh, 00ah, 00dh, 0f1h, 0fdh, 0b0h, 0efh
+            db 03ch, 0e2h, 089h, 0d5h, 08dh, 0c9h, 03dh, 0beh, 090h, 0b3h, 07ch, 0a9h, 0f9h, 09fh, 0feh, 096h
+            db 085h, 08eh, 085h, 086h, 0f8h, 07eh, 0d8h, 077h, 01eh, 071h, 0c4h, 06ah, 0c6h, 064h, 01eh, 05fh
+            db 0c8h, 059h, 0beh, 054h, 0fch, 04fh, 07fh, 04bh, 042h, 047h, 042h, 043h, 07ch, 03fh, 0ech, 03bh
+            db 08fh, 038h, 062h, 035h, 063h, 032h, 08fh, 02fh, 0e4h, 02ch, 05fh, 02ah, 0feh, 027h, 0bfh, 025h
+            db 0a1h, 023h, 0a1h, 021h, 0beh, 01fh, 0f6h, 01dh, 047h, 01ch, 0b1h, 01ah, 031h, 019h, 0c7h, 017h
+            db 072h, 016h, 02fh, 015h, 0ffh, 013h, 0dfh, 012h, 0d0h, 011h, 0d0h, 010h, 0dfh, 00fh, 0fbh, 00eh
+            db 023h, 00eh, 058h, 00dh, 098h, 00ch, 0e3h, 00bh, 039h, 00bh, 097h, 00ah, 0ffh, 009h, 06fh, 009h
+            db 0e8h, 008h, 068h, 008h, 0efh, 007h, 07dh, 007h, 011h, 007h, 0ach, 006h, 04ch, 006h, 0f1h, 005h
+            db 09ch, 005h, 04bh, 005h, 0ffh, 004h, 0b7h, 004h, 074h, 004h, 034h, 004h, 0f7h, 003h, 0beh, 003h
+            db 088h, 003h, 056h, 003h, 026h, 003h, 0f8h, 002h, 0ceh, 002h, 0a5h, 002h, 07fh, 002h, 05bh, 002h
+            db 03ah, 002h, 01ah, 002h, 0fbh, 001h, 0dfh, 001h, 0c4h, 001h, 0abh, 001h, 093h, 001h, 07ch, 001h
+            db 067h, 001h, 052h, 001h, 03fh, 001h, 02dh, 001h, 01dh, 001h, 00dh, 001h, 0fdh, 000h, 0efh, 000h
+            db 0e2h, 000h, 0d5h, 000h, 0c9h, 000h, 0beh, 000h, 0b3h, 000h, 0a9h, 000h, 09fh, 000h, 096h, 000h
+            db 08eh, 000h, 086h, 000h, 07eh, 000h, 077h, 000h, 071h, 000h, 06ah, 000h, 064h, 000h, 05fh, 000h
+
+
+    song_size dw 1130 	; 16 for each line (since each line has 16 dw)
+
+    ; 0~127 -> midi note
+    ; 254   -> note off
+    ; 255   -> ignore
+    
+
 
 start:
     xor ax, ax      ; just cleaning up some registers
