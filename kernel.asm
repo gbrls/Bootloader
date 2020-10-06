@@ -12,7 +12,7 @@ data:
     mensagemi db 'CInstema operacional X - Ver 0.1',13,10,'Empresa de software Ltda. (1984)',13,10,13,10,'Digite ls para ajuda.',13,10,0
 
     erro_msg db 'Comando nao reconhecido (o_o)',13,10,0
-    about_msg db 'Este sistema foi desenvolvido por alie- ligenas do passado.',13,10,0
+    about_msg db 'Este sistema foi desenvolvido por alie- nigenas do passado.                     (Gabriel Schneider - gas6,              Lucca Morosini - lmg2,                  Mateus Ferreira - mfbs2,                Matheus Elias - meap .                  Outubro de 2020)',13,10,0
     sprompt db 'MY-PC>',0
 
     arg TIMES 64 db 0
