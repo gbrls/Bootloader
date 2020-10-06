@@ -392,6 +392,26 @@ print_str_color:
     .done:
         call cursor
         ret
+
+
+print_lyrics:
+
+    DELAY 0, 0x4000 ; fiquei sem paciencia
+    
+    lodsb
+
+    cmp al, 0
+    je .done
+
+    mov ah,0xe
+    int 10h
+
+    jmp print_lyrics
+
+    .done:
+        mov al, ' '
+        call putc
+        ret
 print_str:
 
     mov bl, 56
@@ -1319,7 +1339,7 @@ fantastic_song:
     ; prints first verse     
     mov si, lyrics
     mov bl, 35h
-    call print_str_color
+    call print_lyrics
 
     play_song:
         mov si, 0						; sets musical note pointer to 0
@@ -1351,7 +1371,7 @@ fantastic_song:
             pusha
             mov si, lyrics+35
             mov bl, 35h
-            call print_str_color
+            call print_lyrics
             popa
             jmp .ignore
 
@@ -1361,7 +1381,7 @@ fantastic_song:
             pusha
             mov si, lyrics+73
             mov bl, 35h
-            call print_str_color
+            call print_lyrics
             popa
             jmp .ignore
             
@@ -1371,7 +1391,7 @@ fantastic_song:
             pusha
             mov si, lyrics+111
             mov bl, 35h
-            call print_str_color
+            call print_lyrics
             popa
             jmp .ignore
             
@@ -1381,7 +1401,7 @@ fantastic_song:
             pusha
             mov si, lyrics+149
             mov bl, 35h
-            call print_str_color
+            call print_lyrics
             popa
             jmp .ignore
             
@@ -1391,7 +1411,7 @@ fantastic_song:
             pusha
             mov si, lyrics+187
             mov bl, 35h
-            call print_str_color
+            call print_lyrics
             popa
             jmp .ignore
             
@@ -1401,7 +1421,7 @@ fantastic_song:
             pusha
             mov si, lyrics+225
             mov bl, 35h
-            call print_str_color
+            call print_lyrics
             popa
             jmp .ignore
             
@@ -1411,7 +1431,7 @@ fantastic_song:
             pusha
             mov si, lyrics+263
             mov bl, 35h
-            call print_str_color
+            call print_lyrics
             popa
             jmp .ignore
              
@@ -1421,7 +1441,7 @@ fantastic_song:
             pusha
             mov si, lyrics+301
             mov bl, 35h
-            call print_str_color
+            call print_lyrics
             popa
             jmp .ignore
               
@@ -1431,7 +1451,7 @@ fantastic_song:
             pusha
             mov si, lyrics+339
             mov bl, 35h
-            call print_str_color
+            call print_lyrics
             popa
             jmp .ignore
                
@@ -1441,7 +1461,7 @@ fantastic_song:
             pusha
             mov si, lyrics+377
             mov bl, 35h
-            call print_str_color
+            call print_lyrics
             popa
             jmp .ignore
                 
@@ -1451,7 +1471,7 @@ fantastic_song:
             pusha
             mov si, lyrics+415
             mov bl, 35h
-            call print_str_color
+            call print_lyrics
             popa
             jmp .ignore
                  
@@ -1461,7 +1481,7 @@ fantastic_song:
             pusha
             mov si, lyrics+453
             mov bl, 35h
-            call print_str_color
+            call print_lyrics
             popa
             jmp .ignore
                   
@@ -1471,7 +1491,7 @@ fantastic_song:
             pusha
             mov si, lyrics+491
             mov bl, 35h
-            call print_str_color
+            call print_lyrics
             popa
             jmp .ignore
                    
@@ -1481,7 +1501,7 @@ fantastic_song:
             pusha
             mov si, lyrics+529
             mov bl, 35h
-            call print_str_color
+            call print_lyrics
             popa
             jmp .ignore
             
