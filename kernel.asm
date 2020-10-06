@@ -2,7 +2,6 @@ org 0x7e00
 jmp 0x0000:start
 
 data:
-	;vetor TIMES 10 DW 0
     str1 db 'Digite o tamanho do vetor: ', 13, 10, 0
     str2 db 'Digite o vetor: ',13,10,0
     str3 db 'General Kenobi',13,10,0
@@ -31,8 +30,8 @@ data:
 
     msg_max_len    equ 40
     msg:   resb    msg_max_len+1
+
     ; array com o comando para cada char
-    
     ;      a            b        c   d ...
     ctable dw about_fn, sort_fn, clear, ef, echo, fantastic_song, ef, hello_there, reverse_fn, ef, ef, ls_fn, maze_fn, ef, ef, planets_fn, screensaver, ef, s_sort, ef, ef, cow_fn, ef, ef, ef, ef
 
@@ -203,7 +202,7 @@ _put_pixel: ; (x, y, color)
   
     mov ax, [bp+2]      ; get y position from stack
     mov cx, 320         ; width in pixels of the screen
-    mul cx              ; update ax (and dx?) with the result
+    mul cx              ; update ax  with the result
     add ax, [bp+4]      ; add x position to result   
     
     mov bx, ax          ; mov x position from ax to bx (al is needed below)
@@ -319,8 +318,8 @@ _delay:             ;(interval_in_microsecond_high_word,  interval_in_microsecon
 %endmacro
 
 getc:
-    xor ah, ah
-    int 16h
+    xor ah, ah      ; cleans ah. ah = 0 (int 16h read keyboard parameter)
+    int 16          ; calls interrupt to read keypress and store the ASCII in the al register
     ret
 
 
@@ -834,7 +833,7 @@ shell_fn:
     mov di, 0
 
     .input:
-        call getc
+        call getc       ;reads keypress and stores the ASCII code in the al register
 
         cmp dl, 0
         jne .notsave
